@@ -10,5 +10,17 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 'latest'
-  }
+  },
+  rules: {
+    'vue/multi-word-component-names': 'off',
+    'no-console': 'warn',
+    'vue/block-tag-newline': ['error', {
+      singleline: 'never',
+      multiline: 'always',
+      maxEmptyLines: 1,
+    }],
+    'vue/component-name-in-template-casing': ['error', 'kebab-case', { registeredComponentsOnly: false }],
+    'vue/custom-event-name-casing': ['error', 'kebab-case'],
+    'vue/require-name-property': 'error',
+  },
 }

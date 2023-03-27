@@ -1,61 +1,20 @@
 <script>
-import {
-  computed,
-  onMounted
-} from 'vue';
-
-import {
-  RouterLink,
-  RouterView
-} from 'vue-router';
-
-import HelloWorld from './components/HelloWorld.vue';
-import { useBlogStore } from './store/blogStore';
+import { RouterView } from 'vue-router';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
-    RouterLink,
     RouterView
-  },
-  setup() {
-    const blogStore = useBlogStore();
-
-    onMounted(async () => {
-      await blogStore.getPost(1);
-    });
-
-    const post = computed(() => blogStore.post);
-    const isPostLoading = computed(() => blogStore.isPostLoading);
-
-    return {
-      blogStore,
-      post,
-      isPostLoading,
-    }
   },
 }
 </script>
 
 <template>
   <header>
-    {{ isPostLoading }}
-    {{ post }}
-    sqdqsds
-    <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div> -->
+    <h1>Hackaton 2023</h1>
   </header>
 
-  <RouterView />
+  <router-view />
 </template>
 
 <style lang="scss" scoped>
