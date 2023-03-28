@@ -927,9 +927,9 @@
             'dev_requirement' => false,
         ),
         'symfony/password-hasher' => array(
-            'pretty_version' => 'v6.1.3',
-            'version' => '6.1.3.0',
-            'reference' => '264894821636b77bb8282db6ec33b8b07b7a0678',
+            'pretty_version' => 'v6.1.11',
+            'version' => '6.1.11.0',
+            'reference' => '49124e581f1ee90c1e19ca64b45f384f1dadd118',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/password-hasher',
             'aliases' => array(),
