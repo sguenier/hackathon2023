@@ -58,7 +58,7 @@ class UserController extends AbstractController
                 $user->setLastname($params['lastname']);
                 $user->setFirstname($params['firstname']);
 
-                $job = $jobRepository->findOneById($idjob);
+                $job = $jobRepository->findOneById($params["job"]);
 
                 if ( is_null($job) ) {
                     $resp = array(
@@ -68,7 +68,7 @@ class UserController extends AbstractController
                     return new JsonResponse($resp, 400);
                 }
 
-                $user->setJob($params['job']);
+                $user->setJob($job);
                 $user->setSocialSecurityNumber($params['socialsecuritynumber']);
 
                 $userRepository->save($user, true);
@@ -189,7 +189,7 @@ class UserController extends AbstractController
             );
 
             $resp = array(
-                "message" => "The token provided is incorrect.",
+                "message" => "User accessed with success.",
                 "user" => $tabUser
             );
 
