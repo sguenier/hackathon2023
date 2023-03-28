@@ -161,8 +161,8 @@ class ComposerStaticInite3051687080b2ac78e10fa357a6f3d60
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
         ),
         'Webmozart\\Assert\\' => 
         array (
@@ -546,8 +546,8 @@ class ComposerStaticInite3051687080b2ac78e10fa357a6f3d60
         ),
         'Doctrine\\Common\\' => 
         array (
-            0 => __DIR__ . '/..' . '/doctrine/event-manager/lib/Doctrine/Common',
-            1 => __DIR__ . '/..' . '/doctrine/common/src',
+            0 => __DIR__ . '/..' . '/doctrine/common/src',
+            1 => __DIR__ . '/..' . '/doctrine/event-manager/lib/Doctrine/Common',
         ),
         'Doctrine\\Bundle\\MigrationsBundle\\' => 
         array (
@@ -573,8 +573,14 @@ class ComposerStaticInite3051687080b2ac78e10fa357a6f3d60
 
     public static $classMap = array (
         'App\\Controller\\Back\\DefaultController' => __DIR__ . '/../..' . '/src/Controller/Back/DefaultController.php',
+        'App\\Controller\\Back\\UserController' => __DIR__ . '/../..' . '/src/Controller/Back/UserController.php',
         'App\\Controller\\Front\\DefaultController' => __DIR__ . '/../..' . '/src/Controller/Front/DefaultController.php',
+        'App\\Controller\\SecurityController' => __DIR__ . '/../..' . '/src/Controller/SecurityController.php',
+        'App\\Entity\\Job' => __DIR__ . '/../..' . '/src/Entity/Job.php',
+        'App\\Entity\\User' => __DIR__ . '/../..' . '/src/Entity/User.php',
         'App\\Kernel' => __DIR__ . '/../..' . '/src/Kernel.php',
+        'App\\Repository\\JobRepository' => __DIR__ . '/../..' . '/src/Repository/JobRepository.php',
+        'App\\Repository\\UserRepository' => __DIR__ . '/../..' . '/src/Repository/UserRepository.php',
         'Collator' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/Resources/stubs/Collator.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
