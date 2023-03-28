@@ -1,3 +1,9 @@
+<template>
+  <main>
+    <h2>Home</h2>
+  </main>
+</template>
+
 <script>
 import {
   computed,
@@ -26,9 +32,3 @@ export default {
   },
 }
 </script>
-
-<template>
-  <main>
-    <h2>Home</h2>
-  </main>
-</template>

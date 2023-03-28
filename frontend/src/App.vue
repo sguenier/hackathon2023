@@ -1,3 +1,11 @@
+<template>
+  <header>
+    <h1>Hackaton 2023</h1>
+  </header>
+
+  <router-view />
+</template>
+
 <script>
 import { RouterView } from 'vue-router';
 
@@ -8,14 +16,6 @@ export default {
   },
 }
 </script>
-
-<template>
-  <header>
-    <h1>Hackaton 2023</h1>
-  </header>
-
-  <router-view />
-</template>
 
 <style lang="scss" scoped>
 header {

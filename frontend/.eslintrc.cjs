@@ -22,5 +22,8 @@ module.exports = {
     'vue/component-name-in-template-casing': ['error', 'kebab-case', { registeredComponentsOnly: false }],
     'vue/custom-event-name-casing': ['error', 'kebab-case'],
     'vue/require-name-property': 'error',
+    'vue/component-tags-order': ['error', {
+      order: ['template', 'script', 'style'],
+    }],
   },
 }
