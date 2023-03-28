@@ -7,8 +7,14 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'App\\Controller\\Back\\DefaultController' => $baseDir . '/src/Controller/Back/DefaultController.php',
+    'App\\Controller\\Back\\UserController' => $baseDir . '/src/Controller/Back/UserController.php',
     'App\\Controller\\Front\\DefaultController' => $baseDir . '/src/Controller/Front/DefaultController.php',
+    'App\\Controller\\SecurityController' => $baseDir . '/src/Controller/SecurityController.php',
+    'App\\Entity\\Job' => $baseDir . '/src/Entity/Job.php',
+    'App\\Entity\\User' => $baseDir . '/src/Entity/User.php',
     'App\\Kernel' => $baseDir . '/src/Kernel.php',
+    'App\\Repository\\JobRepository' => $baseDir . '/src/Repository/JobRepository.php',
+    'App\\Repository\\UserRepository' => $baseDir . '/src/Repository/UserRepository.php',
     'Collator' => $vendorDir . '/symfony/polyfill-intl-icu/Resources/stubs/Collator.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'DeepCopy\\DeepCopy' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
