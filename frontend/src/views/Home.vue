@@ -1,7 +1,6 @@
 <template>
   <main>
     <h2>Home</h2>
-    <quill-editor theme="snow" />
   </main>
 </template>
 
@@ -27,7 +26,7 @@ export default {
     return {
       blogStore,
       post,
-      isPostLoading,
+      isPostLoading
     }
   },
 }
