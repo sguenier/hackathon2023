@@ -44,7 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $session_token = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_session_token = null;
 
     public function getId(): ?int
@@ -182,7 +182,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->date_session_token;
     }
 
-    public function setDateSessionToken(\DateTimeInterface $date_session_token): self
+    public function setDateSessionToken(?\DateTimeInterface $date_session_token): self
     {
         $this->date_session_token = $date_session_token;
 

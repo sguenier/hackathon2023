@@ -12,6 +12,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Monolog\DateTimeImmutable;
 
 #[Route('/user')]
 
@@ -27,17 +30,15 @@ class UserController extends AbstractController
     }
 
     #[Route('/createuser', name: 'user_create', methods: ['POST']) ]
-    public function create(UserRepository $userRepository, JobRepository $jobRepository, Request $request): Response
+    public function create(UserRepository $userRepository, JobRepository $jobRepository, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
 
-        // $params = json_decode($request->getContent(), true);
         $params = json_decode($request->getContent(), true);
 
         $missing_param = array();
 
-        if ( $email['email'] != "" ) {
-            $email = $params['email'];
-        }
+
+        $email = $params['email'];
         $firstname = $params['firstname'];
         $lastname = $params['lastname'];
         $socialsecuritynumber = $params['socialsecuritynumber'];
@@ -53,12 +54,14 @@ class UserController extends AbstractController
             if ( $pwd == $pwdconfirm ) {
                 $user = new User();
 
+                $pwd = $passwordHasher->hashPassword($user, $pwd);
+
                 $user->setEmail($email);
                 $user->setPassword($pwd);
                 $user->setLastname($lastname);
                 $user->setFirstname($firstname);
 
-                $job = $jobRepository->findOneById(3);
+                $job = $jobRepository->findOneById($idjob);
 
                 if ( is_null($job) ) {
                     $resp = array(
@@ -94,6 +97,52 @@ class UserController extends AbstractController
 
         return new JsonResponse($resp, 409);
 
+    }
+
+    #[Route('/login', name: 'login', methods: ['POST']) ]
+    public function login(UserRepository $userRepository, Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    {
+
+        $params = json_decode($request->getContent(), true);
+
+        $email = $params['email'];
+        $pwd = $params['pwd'];
+
+        $users = $userRepository->findByEmail($email);
+
+        if ( count($users) > 0 ) {
+            $user = $users[0];
+
+            if ($passwordHasher->isPasswordValid($user, $pwd)) {
+                $token = $this->generateToken();
+
+                $user->setSessionToken($token);
+
+                $date = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+                $user->setDateSessionToken($date);
+
+                $userRepository->save($user, true);
+
+                $resp = array(
+                    "token" => $token,
+                    "message" => "Connected with success."
+                );
+
+                return new JsonResponse($resp, 200);
+            }
+        } else {
+            $resp = array(
+                "message" => "User provided doesn't exist."
+            );
+
+            return new JsonResponse($resp, 400);
+        }
+
+    }
+
+    public function generateToken()
+    {
+        return rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
     }
 
 }
