@@ -6,6 +6,7 @@
     "baseUrl": ".",
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "types": ["element-plus/global"],
     "paths": {
       "@/*": ["./src/*"]
     }
