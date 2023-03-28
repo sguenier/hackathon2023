@@ -8,6 +8,7 @@ export const useAuthStore = defineStore('authStore', {
     isLogged: false,
     isLoginLoading: false,
     ephemeralToken: '',
+    isRegisterLoading: false,
   }),
 
   actions: {
@@ -36,6 +37,19 @@ export const useAuthStore = defineStore('authStore', {
         this.isLoginLoading = false;
         throw error;
       }
+    },
+
+    async register(form) {
+      this.isRegisterLoading = true;
+      try {
+        const { data } = await $API.post('auth/register/', form);
+        this.isRegisterLoading = false;
+        return data;
+      } catch (error) {
+        this.isRegisterLoading = false;
+        throw error;
+      }
+      
     },
 
     async logout(apiCall = true) {
