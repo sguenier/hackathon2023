@@ -8549,17 +8549,17 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v6.1.4",
-            "version_normalized": "6.1.4.0",
+            "version": "v6.1.11",
+            "version_normalized": "6.1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "03e5987dd9bb98038c60c7af3e58500c81c4aec1"
+                "reference": "5761725c7d007ef8fed3cb425be866a772977ad4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/03e5987dd9bb98038c60c7af3e58500c81c4aec1",
-                "reference": "03e5987dd9bb98038c60c7af3e58500c81c4aec1",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/5761725c7d007ef8fed3cb425be866a772977ad4",
+                "reference": "5761725c7d007ef8fed3cb425be866a772977ad4",
                 "shasum": ""
             },
             "require": {
@@ -8569,7 +8569,7 @@
             "conflict": {
                 "doctrine/annotations": "<1.12",
                 "phpdocumentor/reflection-docblock": "<3.2.2",
-                "phpdocumentor/type-resolver": "<1.4.0",
+                "phpdocumentor/type-resolver": "<1.4.0|>=1.7.0",
                 "symfony/dependency-injection": "<5.4",
                 "symfony/property-access": "<5.4",
                 "symfony/property-info": "<5.4",
@@ -8577,7 +8577,7 @@
                 "symfony/yaml": "<5.4"
             },
             "require-dev": {
-                "doctrine/annotations": "^1.12",
+                "doctrine/annotations": "^1.12|^2",
                 "phpdocumentor/reflection-docblock": "^3.2|^4.0|^5.0",
                 "symfony/cache": "^5.4|^6.0",
                 "symfony/config": "^5.4|^6.0",
@@ -8605,7 +8605,7 @@
                 "symfony/var-exporter": "For using the metadata compiler.",
                 "symfony/yaml": "For using the default YAML mapping loader."
             },
-            "time": "2022-08-26T10:32:31+00:00",
+            "time": "2023-01-20T17:44:30+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -8633,7 +8633,7 @@
             "description": "Handles serializing and deserializing data structures, including object graphs, into array structures or other formats like XML and JSON.",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/serializer/tree/v6.1.4"
+                "source": "https://github.com/symfony/serializer/tree/v6.1.11"
             },
             "funding": [
                 {

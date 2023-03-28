@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Monolog\DateTimeImmutable;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/user')]
 
@@ -102,7 +103,7 @@ class UserController extends AbstractController
 
     }
 
-    #[Route('/login', name: 'login', methods: ['POST']) ]
+    #[Route('/login', name: 'user_login', methods: ['POST']) ]
     public function login(UserRepository $userRepository, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
 
@@ -141,6 +142,67 @@ class UserController extends AbstractController
             return new JsonResponse($resp, 400);
         }
 
+    }
+
+    #[Route('/profile', name: 'user_profile', methods: ['POST']) ]
+    public function profile(UserRepository $userRepository, Request $request, UserPasswordHasherInterface $passwordHasher, SerializerInterface $serializer): Response
+    {
+
+        $params = json_decode($request->getContent(), true);
+        $req_params = ["idUser","token"];
+        $missing_param = array();
+
+        foreach ($req_params as $param) {
+            if ( empty($params[$param]) ) {
+                $missing_param[] = $param;
+            }
+        }
+
+        if ( count($missing_param) > 0 ) {
+            $resp = array(
+                "message" => "The user doesn't exists.",
+                "missing_param" => $missing_param
+            );
+
+            return new JsonResponse($resp, 400);
+        }
+
+        $user = $userRepository->findOneById($params['idUser']);
+
+        if ( is_null($user) ) {
+            $resp = array(
+                "message" => "The user doesn't exists."
+            );
+
+            return new JsonResponse($resp, 404);
+        }
+
+        if ( $user->getSessionToken() == $params['token'] ) {
+
+            $tabUser = array(
+                "id"=>$user->getId(),
+                "email"=>$user->getEmail(),
+                "role"=>$user->getRoles(),
+                "lastname"=>$user->getLastname(),
+                "firstname"=>$user->getFirstname(),
+                "jobId"=>$user->getJob()->getId(),
+                "socialsecuritynumber"=>$user->getSocialSecurityNumber()
+            );
+
+            $resp = array(
+                "message" => "The token provided is incorrect.",
+                "user" => $tabUser
+            );
+
+            return new JsonResponse($resp, 200);
+            
+        } else {
+            $resp = array(
+                "message" => "The token provided is incorrect."
+            );
+
+            return new JsonResponse($resp, 403);
+        }
     }
 
     public function generateToken()

@@ -1122,9 +1122,9 @@
             'dev_requirement' => false,
         ),
         'symfony/serializer' => array(
-            'pretty_version' => 'v6.1.4',
-            'version' => '6.1.4.0',
-            'reference' => '03e5987dd9bb98038c60c7af3e58500c81c4aec1',
+            'pretty_version' => 'v6.1.11',
+            'version' => '6.1.11.0',
+            'reference' => '5761725c7d007ef8fed3cb425be866a772977ad4',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/serializer',
             'aliases' => array(),
