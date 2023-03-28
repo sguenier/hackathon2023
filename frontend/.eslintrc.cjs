@@ -21,6 +21,17 @@ module.exports = {
         maxEmptyLines: 1,
       },
     ],
+    'vue/html-indent': [
+      'error',
+      2,
+      {
+        attribute: 1,
+        baseIndent: 1,
+        closeBracket: 0,
+        alignAttributesVertically: true,
+        ignores: [],
+      },
+    ],
     'vue/component-name-in-template-casing': [
       'error',
       'kebab-case',
