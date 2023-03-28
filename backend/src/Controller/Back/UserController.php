@@ -35,31 +35,27 @@ class UserController extends AbstractController
 
         $params = json_decode($request->getContent(), true);
 
+        $req_params = ["pwd","pwdconfirm","socialsecuritynumber","email","firstname","lastname","job"];
+
         $missing_param = array();
 
-
-        $email = $params['email'];
-        $firstname = $params['firstname'];
-        $lastname = $params['lastname'];
-        $socialsecuritynumber = $params['socialsecuritynumber'];
-        $idjob = $params['job'];
-
-        $pwd = $params['pwd'];
-        $pwdconfirm = $params['pwdconfirm'];
-
-        $test_user = $userRepository->findByEmail($email);
+        foreach ($req_params as $param) {
+            if ( empty($params[$param]) ) {
+                $missing_param[] = $param;
+            }
+        }
 
         //cas ou l'user n'existe pas on le crée
-        if ( count($test_user) == 0 ) {
-            if ( $pwd == $pwdconfirm ) {
+        if ( count($missing_param) == 0 && is_null($userRepository->findOneByEmail($params['email'])) ) {
+            if ( $params['pwd'] == $params['pwdconfirm'] ) {
                 $user = new User();
 
-                $pwd = $passwordHasher->hashPassword($user, $pwd);
+                $pwd = $passwordHasher->hashPassword($user, $params['pwd']);
 
-                $user->setEmail($email);
+                $user->setEmail($params['email']);
                 $user->setPassword($pwd);
-                $user->setLastname($lastname);
-                $user->setFirstname($firstname);
+                $user->setLastname($params['lastname']);
+                $user->setFirstname($params['firstname']);
 
                 $job = $jobRepository->findOneById($idjob);
 
@@ -71,8 +67,8 @@ class UserController extends AbstractController
                     return new JsonResponse($resp, 400);
                 }
 
-                $user->setJob($job);
-                $user->setSocialSecurityNumber($socialsecuritynumber);
+                $user->setJob($params['job']);
+                $user->setSocialSecurityNumber($params['socialsecuritynumber']);
 
                 $userRepository->save($user, true);
 
@@ -89,13 +85,20 @@ class UserController extends AbstractController
                 return new JsonResponse($resp, 400);
             }
 
+        } elseif ( count($missing_param) > 0 ) {
+            $resp = array(
+                "message"=>"Parameters are missing.",
+                "missing_param"=>$missing_param
+            );
+    
+            return new JsonResponse($resp, 400);
+        } elseif ( !is_null($userRepository->findOneByEmail($params['email'])) ) {
+            $resp = array(
+                "message"=>"A user with the same email already exists."
+            );
+    
+            return new JsonResponse($resp, 409);
         }
-
-        $resp = array(
-            "message"=>"A user with the same email already exists."
-        );
-
-        return new JsonResponse($resp, 409);
 
     }
 
