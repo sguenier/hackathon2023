@@ -1,7 +1,9 @@
-import './assets/main.css';
+import './assets/scss/main.scss';
+import 'element-plus/dist/index.css';
 
 import { createApp } from 'vue';
 
+import ElementPlus from 'element-plus';
 import { createPinia } from 'pinia';
 
 import App from '@/App.vue';
@@ -15,6 +17,7 @@ const app = createApp(App);
 app.config.globalProperties.$API = $API;
 
 app.component('FontAwesomeIcon', FontAwesomeIcon);
+app.use(ElementPlus)
 app.use(createPinia())
 app.use(router)
 addInterceptors($API, router);
