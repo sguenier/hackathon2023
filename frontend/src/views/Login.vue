@@ -32,12 +32,29 @@ export default {
 
     const rules = ref({
       email: [
-        { required: true, message: 'Veuillez renseigner un email', trigger: 'blur' },
-        { type: 'email', message: 'Veuillez renseigner un email valide', trigger: ['blur', 'change'] },
+        {
+          required: true,
+          message: 'Veuillez renseigner un email',
+          trigger: 'blur', 
+        },
+        {
+          type: 'email',
+          message: 'Veuillez renseigner un email valide',
+          trigger: [ 'blur', 'change' ], 
+        },
       ],
       password: [
-        { required: true, message: 'Veuillez renseigner un mot de passe', trigger: 'blur' },
-        { min: 6, max: 20, message: 'Le mot de passe doit faire entre 6 et 20 caractere', trigger: 'blur' },
+        {
+          required: true,
+          message: 'Veuillez renseigner un mot de passe',
+          trigger: 'blur', 
+        },
+        {
+          min: 6,
+          max: 20,
+          message: 'Le mot de passe doit faire entre 6 et 20 caractere',
+          trigger: 'blur', 
+        },
       ],
     })
 
