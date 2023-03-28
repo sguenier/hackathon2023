@@ -180,13 +180,12 @@ class UserController extends AbstractController
         if ( $user->getSessionToken() == $params['token'] ) {
 
             $tabUser = array(
-                "id"=>$user->getId(),
                 "email"=>$user->getEmail(),
                 "role"=>$user->getRoles(),
                 "lastname"=>$user->getLastname(),
                 "firstname"=>$user->getFirstname(),
-                "jobId"=>$user->getJob()->getId(),
-                "socialsecuritynumber"=>$user->getSocialSecurityNumber()
+                "job"=>["id"=>$user->getJob()->getId(),"name"=>$user->getJob()->getName()],
+                "socialSecurityNumber"=>$user->getSocialSecurityNumber()
             );
 
             $resp = array(
