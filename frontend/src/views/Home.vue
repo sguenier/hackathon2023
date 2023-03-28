@@ -1,6 +1,7 @@
 <template>
   <main>
     <h2>Home</h2>
+    <quill-editor theme="snow" />
   </main>
 </template>
 
@@ -23,7 +24,6 @@ export default {
 
     const post = computed(() => blogStore.post);
     const isPostLoading = computed(() => blogStore.isPostLoading);
-
     return {
       blogStore,
       post,
