@@ -1,6 +1,10 @@
 <template>
   <header>
     <h1>Hackaton 2023</h1>
+    <ul>
+        <li><router-link to="/">Home</router-link></li>
+      <li><router-link to="/form">Form Example</router-link></li>
+    </ul>
   </header>
 
   <router-view />
