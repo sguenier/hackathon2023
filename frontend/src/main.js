@@ -21,14 +21,13 @@ const app = createApp(App);
 app.config.globalProperties.$API = $API;
 
 app.component(VueFeather.name, VueFeather);
-app.use(ElementPlus)
+app.use(ElementPlus);
 app.component('QuillEditor', QuillEditor);
-app.use(createPinia())
-app.use(router)
+app.use(createPinia());
+app.use(router);
 addInterceptors($API, router);
 
-app.mount('#app');
-
+// Init user profile
 const authStore = useAuthStore();
 const profileStore = useProfileStore();
 
@@ -36,3 +35,5 @@ authStore.init();
 if (authStore.isLogged) {
   profileStore.getProfile();
 }
+
+app.mount('#app');
