@@ -1,24 +1,6 @@
 <template>
   <main>
     <h2>Home</h2>
-    <p style="font-size: 66px;">
-      TEST
-    </p>
-    <p style="font-size: 66px;">
-      TEST
-    </p>
-    <p style="font-size: 66px;">
-      TEST
-    </p>
-    <p style="font-size: 66px;">
-      TEST
-    </p>
-    <p style="font-size: 66px;">
-      TEST
-    </p>
-    <p style="font-size: 66px;">
-      TEST
-    </p>
   </main>
 </template>
 
@@ -45,7 +27,7 @@ export default {
       blogStore,
       post,
       isPostLoading,
-    }
+    };
   },
-}
+};
 </script>

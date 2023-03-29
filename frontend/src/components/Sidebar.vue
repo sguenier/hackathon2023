@@ -41,6 +41,12 @@
         :to="{ name: 'login' }"
       >
         <vue-feather
+          v-if="isSmallScreen"
+          size="26"
+          type="log-in"
+        />
+        <vue-feather
+          v-else
           size="16"
           type="log-in"
         />
@@ -84,19 +90,17 @@ export default {
     const isLogged = computed(() => authStore.isLogged);
     const activeRouteName = computed(() => router.currentRoute.value.name);
 
-    const filteredMenuItems = computed(() => {
-      return menuItems.filter((item) => {
-        if (item.mustBeLogged) {
-          return isLogged.value;
-        }
-        return true;
-      });
-    });
+    const filteredMenuItems = computed(() => menuItems.filter((item) => {
+      if (item.mustBeLogged) {
+        return isLogged.value;
+      }
+      return true;
+    }));
 
     const logout = () => {
       authStore.logout();
       router.push({ name: 'Login' });
-    }
+    };
 
     const screenWidth = ref(window.innerWidth);
 
@@ -112,9 +116,7 @@ export default {
       window.removeEventListener('resize', updateScreenWidth);
     });
 
-    const isSmallScreen = computed(() => {
-      return screenWidth.value < 768;
-    });
+    const isSmallScreen = computed(() => screenWidth.value < 768);
     
     return {
       logout,
@@ -184,6 +186,7 @@ export default {
     border-top-right-radius: 24px;
     border-top-left-radius: 24px;
     box-shadow: 0px 0px 2px rgba(23, 43, 77, 0.04), 0px -3px 2px rgba(23, 43, 77, 0.08);
+    justify-content: center;
 
     &__list {
       flex-direction: row;
@@ -199,11 +202,12 @@ export default {
         border-top: 4px solid var(--color-blue-action)
       }
 
-    }
+      &__link:hover {
+        border-left: none;
+        background-color: unset;
+        border-top: 4px solid var(--color-blue-action)
+      }
 
-    &__menu {
-      display: flex;
-      flex-direction: column;
     }
   }
 }
