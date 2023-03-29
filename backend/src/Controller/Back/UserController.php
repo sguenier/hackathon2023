@@ -166,7 +166,7 @@ class UserController extends AbstractController
     {
 
         $params = json_decode($request->getContent(), true);
-        $req_params = ["idUser","token"];
+        $req_params = ["idUser"];
         $missing_param = array();
 
         if ( isset($request->headers->all()['authorization'][0]) ) {

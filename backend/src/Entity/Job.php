@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\JobRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: JobRepository::class)]
@@ -20,6 +21,9 @@ class Job
 
     #[ORM\OneToMany(mappedBy: 'id_job', targetEntity: User::class)]
     private Collection $list_users;
+
+    #[ORM\Column]
+    private ?bool $intern = null;
 
     public function __construct()
     {
@@ -76,6 +80,18 @@ class Job
                 $listUser->setIdJob(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isIntern(): ?bool
+    {
+        return $this->intern;
+    }
+
+    public function setIntern(bool $intern): self
+    {
+        $this->intern = $intern;
 
         return $this;
     }
