@@ -1,30 +1,57 @@
 <template>
   <header class="topbar">
-    <!-- <font-awesome-icon icon="bars" class="topbar__menu" /> -->
     <vue-feather
       class="topbar__menu"
       size="24"
       type="menu"
     />
     <router-link to="/">
-      <img class="topbar__logo" src="@/assets/logo.svg" alt="Jajic" />
+      <img
+        class="topbar__logo"
+        src="@/assets/logo.svg"
+        alt="Jajic"
+      >
     </router-link>
     <div class="topbar__container">
-      <!-- <font-awesome-icon icon="magnifying-glass" class="topbar__search" /> -->
       <vue-feather
         class="topbar__search"
         size="24"
         type="search"
       />
-      <div class="topbar__avatar" ></div>
+      <div
+        v-if="isLogged"
+        class="topbar__avatar"
+      />
+      <div
+        v-else
+        class="topbar__login"
+      >
+        <router-link
+          class="topbar__login"
+          to="/login"
+        >Login</router-link>
+      </div>
     </div>
   </header>
 </template>
 
 <script>
+import { useAuthStore } from '@/store/authStore';
+import { computed } from 'vue';
 
 export default {
   name: 'Topbar',
+
+  setup() {
+    const authStore = useAuthStore();
+
+    const isLogged = computed(() => authStore.isLogged);
+
+    return {
+      isLogged,
+    }
+  },
+
 };
 
 </script>
@@ -63,6 +90,16 @@ export default {
     height: 2rem;
     background-color: var(--color-border);
     border-radius: 1rem;
+  }
+
+  &__login {
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  &__login:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
   }
 
   &__search {
