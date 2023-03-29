@@ -1,15 +1,33 @@
 <template>
   <main>
     <h2>Login</h2>
-    <el-form ref="loginForm" :rules="rules" :model="form" label-width="120px">
-      <el-form-item label="Email" prop="email">
+    <el-form
+      ref="loginForm"
+      :rules="rules"
+      :model="form"
+      label-width="120px"
+    >
+      <el-form-item
+        label="Email"
+        prop="email"
+      >
         <el-input v-model="form.email" />
       </el-form-item>
-      <el-form-item label="Password" prop="pwd">
-        <el-input v-model="form.pwd" type="password" autocomplete="off" />
+      <el-form-item
+        label="Password"
+        prop="pwd"
+      >
+        <el-input
+          v-model="form.pwd"
+          type="password"
+          autocomplete="off"
+        />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">Login</el-button>
+        <el-button
+          type="primary"
+          @click="onSubmit"
+        >Login</el-button>
       </el-form-item>
     </el-form>
   </main>
@@ -21,12 +39,14 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useAuthStore } from '@/store/authStore';
+import { useProfileStore } from '@/store/profileStore';
 
 export default {
   name: 'Login',
   setup() {
     const router = useRouter()
     const authStore = useAuthStore();
+    const profileStore = useProfileStore();
     const form = ref({});
     const loginForm = ref(null);
 
@@ -62,6 +82,7 @@ export default {
       loginForm.value.validate(async (valid) => {
         if (valid) {
           await authStore.login(form.value);
+          await profileStore.getProfile();
           router.push({ name: 'home' });
         }
       });

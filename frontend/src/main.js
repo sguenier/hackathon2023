@@ -13,6 +13,7 @@ import $API from '@/plugins/axios';
 import addInterceptors from '@/plugins/interceptors';
 import router from '@/router';
 import { useAuthStore } from '@/store/authStore';
+import { useProfileStore } from '@/store/profileStore';
 import { QuillEditor } from '@vueup/vue-quill';
 
 const app = createApp(App);
@@ -29,5 +30,9 @@ addInterceptors($API, router);
 app.mount('#app');
 
 const authStore = useAuthStore();
+const profileStore = useProfileStore();
 
 authStore.init();
+if (authStore.isLogged) {
+  profileStore.getProfile();
+}
