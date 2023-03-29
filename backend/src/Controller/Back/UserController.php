@@ -161,13 +161,9 @@ class UserController extends AbstractController
 
     }
 
-    #[Route('/profile/', name: 'user_profile', methods: ['POST']) ]
+    #[Route('/profile/', name: 'user_profile', methods: ['GET']) ]
     public function profile(UserRepository $userRepository, Request $request, UserPasswordHasherInterface $passwordHasher, SerializerInterface $serializer): Response
     {
-
-        $params = json_decode($request->getContent(), true);
-        $req_params = ["idUser"];
-        $missing_param = array();
 
         if ( isset($request->headers->all()['authorization'][0]) ) {
             $token = str_replace("Basic ", "", $request->headers->all()['authorization'][0]);
@@ -179,22 +175,7 @@ class UserController extends AbstractController
             return new JsonResponse($resp, 400);
         }
 
-        foreach ($req_params as $param) {
-            if ( empty($params[$param]) ) {
-                $missing_param[] = $param;
-            }
-        }
-
-        if ( count($missing_param) > 0 ) {
-            $resp = array(
-                "message" => "The user doesn't exists.",
-                "missing_param" => $missing_param
-            );
-
-            return new JsonResponse($resp, 400);
-        }
-
-        $user = $userRepository->findOneById($params['idUser']);
+        $user = $userRepository->findOneByToken($token);
 
         if ( is_null($user) ) {
             $resp = array(

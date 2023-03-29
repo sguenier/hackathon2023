@@ -49,7 +49,7 @@ class JobController extends AbstractController
         }
 
         foreach ($req_params as $param) {
-            if ( empty($params[$param]) ) {
+            if ( !isset($params[$param]) || $params[$param] === "" ) {
                 $missing_param[] = $param;
             }
         }
