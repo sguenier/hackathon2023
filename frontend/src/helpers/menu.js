@@ -15,8 +15,8 @@ export default [
   //   name: 'self-care',
   //   label: 'Bien être',
   // },
-  // {
-  //   name: 'advise',
-  //   label: 'Conseils',
-  // },
+  {
+    name: 'advises',
+    label: 'Conseils',
+  },
 ];

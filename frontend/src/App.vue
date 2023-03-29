@@ -83,6 +83,7 @@ export default {
   &__main {
     grid-area: main;
     padding: 24px;
+    overflow-y: auto;
 
     @media (max-width: 768px) {
       padding: 24px 16px;
