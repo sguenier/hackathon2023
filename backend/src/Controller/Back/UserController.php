@@ -30,7 +30,7 @@ class UserController extends AbstractController
 
     }
 
-    #[Route('/createuser', name: 'user_create', methods: ['POST']) ]
+    #[Route('/createuser/', name: 'user_create', methods: ['POST']) ]
     public function create(UserRepository $userRepository, JobRepository $jobRepository, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
 
@@ -103,11 +103,28 @@ class UserController extends AbstractController
 
     }
 
-    #[Route('/login', name: 'user_login', methods: ['POST']) ]
+    #[Route('/login/', name: 'user_login', methods: ['POST']) ]
     public function login(UserRepository $userRepository, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
 
         $params = json_decode($request->getContent(), true);
+        $missing_param = array();
+        $req_params = ["email","pwd"];
+
+        foreach ($req_params as $param) {
+            if ( empty($params[$param]) ) {
+                $missing_param[] = $param;
+            }
+        }
+
+        if ( count($missing_param) > 0 ) {
+            $resp = array(
+                "message" => "required parameters are missing.",
+                "missing_param" => $missing_param
+            );
+
+            return new JsonResponse($resp, 400);
+        }
 
         $email = $params['email'];
         $pwd = $params['pwd'];
@@ -139,18 +156,28 @@ class UserController extends AbstractController
                 "message" => "User provided doesn't exist."
             );
 
-            return new JsonResponse($resp, 400);
+            return new JsonResponse($resp, 404);
         }
 
     }
 
-    #[Route('/profile', name: 'user_profile', methods: ['POST']) ]
+    #[Route('/profile/', name: 'user_profile', methods: ['POST']) ]
     public function profile(UserRepository $userRepository, Request $request, UserPasswordHasherInterface $passwordHasher, SerializerInterface $serializer): Response
     {
 
         $params = json_decode($request->getContent(), true);
         $req_params = ["idUser","token"];
         $missing_param = array();
+
+        if ( isset($request->headers->all()['authorization'][0]) ) {
+            $token = str_replace("Basic ", "", $request->headers->all()['authorization'][0]);
+        } else {
+            $resp = array(
+                "message" => "The authentification token is missing ffrom the headers."
+            );
+
+            return new JsonResponse($resp, 400);
+        }
 
         foreach ($req_params as $param) {
             if ( empty($params[$param]) ) {
@@ -177,7 +204,7 @@ class UserController extends AbstractController
             return new JsonResponse($resp, 404);
         }
 
-        if ( $user->getSessionToken() == $params['token'] ) {
+        if ( $user->getSessionToken() == $token ) {
 
             $tabUser = array(
                 "email"=>$user->getEmail(),
