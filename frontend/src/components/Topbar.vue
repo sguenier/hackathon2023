@@ -1,11 +1,21 @@
 <template>
   <header class="topbar">
-    <font-awesome-icon icon="bars" class="topbar__menu" />
+    <!-- <font-awesome-icon icon="bars" class="topbar__menu" /> -->
+    <vue-feather
+      class="topbar__menu"
+      size="24"
+      type="menu"
+    />
     <router-link to="/">
       <img class="topbar__logo" src="@/assets/logo.svg" alt="Jajic" />
     </router-link>
     <div class="topbar__container">
-      <font-awesome-icon icon="magnifying-glass" class="topbar__search" />
+      <!-- <font-awesome-icon icon="magnifying-glass" class="topbar__search" /> -->
+      <vue-feather
+        class="topbar__search"
+        size="24"
+        type="search"
+      />
       <div class="topbar__avatar" ></div>
     </div>
   </header>
