@@ -24,7 +24,7 @@ import { RouterView } from 'vue-router';
 
 import Topbar from '@/components/Topbar.vue';
 
-import Sidebar from './components/Sidebar.vue';
+import Sidebar from './components/Navbar.vue';
 import { useAuthStore } from './store/authStore';
 import { useProfileStore } from './store/profileStore';
 import LoadingScreen from './views/LoadingScreen.vue';

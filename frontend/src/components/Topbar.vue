@@ -1,13 +1,12 @@
 <template>
   <header class="topbar">
-    <vue-feather
-      class="topbar__menu"
-      size="24"
-      type="menu"
-    />
-    <router-link to="/">
+    <div class="topbar__menu" />
+    <router-link
+      to="/"
+      class="topbar__logo"
+    >
       <img
-        class="topbar__logo"
+        class="topbar__logo__image"
         src="@/assets/logo.svg"
         alt="Jajic"
       >
@@ -18,10 +17,16 @@
         size="24"
         type="search"
       />
-      <div
+      <router-link
+        :to="{ name: 'profile' }"
         v-if="isLogged"
-        class="topbar__avatar"
-      />
+        class="topbar__user"
+      >
+        <div
+          class="topbar__user__avatar"
+        />
+        <span class="topbar__user__name">{{ profile.firstname }} {{ profile.lastname }}</span>
+      </router-link>
       <div
         v-else
         class="topbar__login"
@@ -36,18 +41,23 @@
 </template>
 
 <script>
-import { useAuthStore } from '@/store/authStore';
 import { computed } from 'vue';
+
+import { useAuthStore } from '@/store/authStore';
+import { useProfileStore } from '@/store/profileStore';
 
 export default {
   name: 'Topbar',
 
   setup() {
     const authStore = useAuthStore();
+    const profileStore = useProfileStore();
 
     const isLogged = computed(() => authStore.isLogged);
+    const profile = computed(() => profileStore.profile);
 
     return {
+      profile,
       isLogged,
     };
   },
@@ -58,10 +68,9 @@ export default {
 
 <style lang="scss" scoped>
 .topbar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  display: grid;
   align-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
   padding: 1rem;
   border-width: 0px 1px 1px 1px;
   border-style: solid;
@@ -79,21 +88,41 @@ export default {
   }
 
   &__logo {
-    max-height: 2.5rem;
+    display: flex;
+    &__image {
+      max-height: 2.5rem;
+    }
+    justify-content: center;
   }
 
   &__container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
   }
 
-  &__avatar {
-    width: 2rem;
-    height: 2rem;
-    background-color: var(--color-border);
-    border-radius: 1rem;
+  &__user {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &__avatar {
+      width: 2rem;
+      height: 2rem;
+      background-color: var(--color-border);
+      border-radius: 1rem;
+    }
+
+    &__name {
+      color: var(--text-secondary);
+
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
   }
 
   &__login {
