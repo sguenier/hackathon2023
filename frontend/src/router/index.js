@@ -3,6 +3,26 @@ import {
   createWebHistory,
 } from 'vue-router';
 
+import { useAuthStore } from '@/store/authStore';
+
+const isNotLogged = (to, from, next) => {
+  const authStore = useAuthStore();
+  if (authStore.isLogged) {
+    next({ name: 'home' });
+  } else {
+    next();
+  }
+};
+
+const isLogged = (to, from, next) => {
+  const authStore = useAuthStore();
+  if (authStore.isLogged) {
+    next();
+  } else {
+    next({ name: 'login' });
+  }
+};
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -15,11 +35,26 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('@/views/Login.vue'),
+      beforeEnter: isNotLogged,
     },
     {
       path: '/register',
       name: 'register',
       component: () => import('@/views/Register.vue'),
+      beforeEnter: isNotLogged,
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('@/views/Profile.vue'),
+      beforeEnter: isLogged,
+      children: [
+        {
+          path: 'edit',
+          name: 'profileEdit',
+          component: () => import('@/views/ProfileEdit.vue'),
+        },
+      ],
     },
     {
       path: '/form',
@@ -37,6 +72,6 @@ const router = createRouter({
     //   component: () => import('@/views/NotFound.vue'),
     // },
   ],
-})
+});
 
-export default router
+export default router;

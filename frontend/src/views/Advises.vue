@@ -2,7 +2,7 @@
   <div class="advises">
     <h2>Conseils</h2>
     <jaji-tabs
-      :tabs="tabs"
+      :tabs="filteredTabs"
       v-model="selectedTabValue"
     />
     <div class="advises__list">
@@ -25,6 +25,7 @@ import {
 
 import Advise from '@/components/Advise.vue';
 import JajiTabs from '@/components/JajiTabs.vue';
+import { useAuthStore } from '@/store/authStore';
 import { useBlogStore } from '@/store/blogStore';
 
 export default {
@@ -35,18 +36,26 @@ export default {
   },
   setup() {
     const blogStore = useBlogStore();
-    const tabs = [ { label: 'Pour Vous', value: 'custom' }, { label: 'Actualité Santé', value: 'actuality' } ];
+    const authStore = useAuthStore();
+    const tabs = [ { label: 'Pour Vous', value: 'custom', mustBeLogged: true }, { label: 'Actualité Santé', value: 'actuality' } ];
     const selectedTabValue = ref('custom');
 
+    const isLogged = computed(() => authStore.isLogged);
+    const filteredTabs = computed(() => tabs.filter((tab) => tab.mustBeLogged ? isLogged.value : true));
+
     onMounted(() => {
+      if (!isLogged.value) {
+        selectedTabValue.value = 'actuality';
+      }
       blogStore.getAdvises();
     });
 
     const advises = computed(() => blogStore.advises);
 
     return {
+      isLogged,
       advises,
-      tabs,
+      filteredTabs,
       selectedTabValue,
     };
   },

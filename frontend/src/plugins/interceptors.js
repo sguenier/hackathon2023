@@ -12,7 +12,7 @@ export default (axios, router) => {
       const token = Cookies.get(import.meta.env.VITE_COOKIE_TOKEN_NAME);
       console.log(`interceptors request token = ${token}`);
       if (token && config.noAuthToken !== true) {
-        config.headers.authorization = `Token ${token}`;
+        config.headers.authorization = `Bearer ${token}`;
       }
 
       return config;
