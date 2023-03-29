@@ -5,11 +5,11 @@
       <el-form-item label="Email" prop="email">
         <el-input v-model="form.email" />
       </el-form-item>
-      <el-form-item label="Mot de passe" prop="password">
-        <el-input v-model="form.password" type="password" autocomplete="off" />
+      <el-form-item label="Mot de passe" prop="pwd">
+        <el-input v-model="form.pwd" type="password" autocomplete="off" />
       </el-form-item>
-      <el-form-item label="Confirmation du MdP" prop="passwordConfirmation">
-        <el-input v-model="form.passwordConfirmation" type="password" autocomplete="off" />
+      <el-form-item label="Confirmation du MdP" prop="pwdconfirm">
+        <el-input v-model="form.pwdconfirm" type="password" autocomplete="off" />
       </el-form-item>
       <el-form-item label="Prénom" prop="firstname">
         <el-input v-model="form.firstname" />
@@ -17,16 +17,16 @@
       <el-form-item label="Nom de Famille" prop="lastname">
         <el-input v-model="form.lastname" />
       </el-form-item>
-      <el-form-item label="Numéro de securité social" prop="socialSecurityNumber">
-        <el-input v-model="form.socialSecurityNumber" />
+      <el-form-item label="Numéro de securité social" prop="socialsecuritynumber">
+        <el-input v-model="form.socialsecuritynumber" />
       </el-form-item>
-      <el-form-item label="Poste occupé" prop="socialSecurityNumber">
-        <el-select v-model="value" class="m-2" placeholder="Select" size="large">
+      <el-form-item label="Poste occupé" prop="job">
+        <el-select v-model="form.job" placeholder="Poste occupé">
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="job in jobs"
+            :key="job.id"
+            :label="job.name"
+            :value="job.id"
           />
         </el-select>
       </el-form-item>
@@ -51,11 +51,17 @@ export default {
     const authStore = useAuthStore();
     const form = ref({});
     const registerFrom = ref(null);
+    const jobs = ref([
+      {
+        id: 1,
+        name: 'poubellier',
+      },
+    ])
 
     const confirmPasswordValidator = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('Veuillez confirmer le mot de passe'));
-      } else if (value !== form.value.password) {
+      } else if (value !== form.value.pwd) {
         callback(new Error('Les mots de passe ne correspondent pas!'));
       } else {
         callback();
@@ -75,7 +81,7 @@ export default {
           trigger: [ 'blur', 'change' ], 
         },
       ],
-      password: [
+      pwd: [
         {
           required: true,
           message: 'Veuillez renseigner un mot de passe',
@@ -88,7 +94,7 @@ export default {
           trigger: 'blur', 
         },
       ],
-      passwordConfirmation: [
+      pwdconfirm: [
         {
           required: true,
           message: 'Veuillez confirmer le mot de passe',
@@ -113,7 +119,7 @@ export default {
           trigger: 'blur', 
         },
       ],
-      socialSecurityNumber: [
+      socialsecuritynumber: [
         {
           required: true,
           message: 'Veuillez renseigner un numéro de sécurité sociale',
@@ -126,6 +132,7 @@ export default {
           trigger: 'blur', 
         },
       ],
+      job: [ { required: true, message: 'Veuillez renseigner un poste', trigger: 'change' } ],
     });
 
     const onSubmit = () => {
@@ -142,6 +149,7 @@ export default {
       form,
       registerFrom,
       onSubmit,
+      jobs,
     }
   },
 }

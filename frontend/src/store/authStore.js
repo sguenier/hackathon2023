@@ -16,11 +16,7 @@ export const useAuthStore = defineStore('authStore', {
       this.ephemeralToken = '';
       this.isLoginLoading = true;
       try {
-        // const { data } = await $API.post('admin/user/login/', form);
-        const data = {
-          token: 'token_provisoire',
-          message: 'Log ok !',
-        }
+        const { data } = await $API.post('admin/user/login', form);
         if (data.token) {
           this.isLogged = true;
           Cookies.set(
@@ -46,10 +42,7 @@ export const useAuthStore = defineStore('authStore', {
     async register(form) {
       this.isRegisterLoading = true;
       try {
-        // const { data } = await $API.post('auth/register/', form);
-        const data = {
-          message: 'Register OK',
-        }
+        const { data } = await $API.post('admin/user/createuser', form);
         this.isRegisterLoading = false;
         return data;
       } catch (error) {
