@@ -69,8 +69,13 @@
   --color-purple-lighter: #{$color-purple-lighter};
   --color-purple-lightest: #{$color-purple-lightest};
   --color-purple-lightest-max: #{$color-purple-lightest-max};
+}
 
+body, html {
+  margin: 0;
+  height: 100%;
 
-
-
+  #app {
+    height: 100%;
+  }
 }
