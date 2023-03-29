@@ -46,7 +46,10 @@ export const useAuthStore = defineStore('authStore', {
     async register(form) {
       this.isRegisterLoading = true;
       try {
-        const { data } = await $API.post('auth/register/', form);
+        // const { data } = await $API.post('auth/register/', form);
+        const data = {
+          message: 'Register OK',
+        }
         this.isRegisterLoading = false;
         return data;
       } catch (error) {
