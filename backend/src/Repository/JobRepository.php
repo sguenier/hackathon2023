@@ -49,6 +49,16 @@ class JobRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findOneByName($name): ?Job
+    {
+        return $this->createQueryBuilder('j')
+            ->andWhere('j.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
 
 //    /**
 //     * @return Job[] Returns an array of Job objects
