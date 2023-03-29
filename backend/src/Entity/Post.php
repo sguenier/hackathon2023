@@ -23,6 +23,10 @@ class Post
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
+    #[ORM\ManyToOne(inversedBy: 'posts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $author = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +64,22 @@ class Post
     public function setCreatedAt(\DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+
+    // Risque de renvoyer l'erreur "undefined array key job_id" 
+    // TODO A FIX
+
+    // public function getAuthor(): ?User
+    // {
+    //     return $this->author;
+    // }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }
