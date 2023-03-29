@@ -32,6 +32,40 @@ module.exports = {
         ignores: [],
       },
     ],
+    'vue/max-attributes-per-line': [
+      'error',
+      {
+        "singleline": {
+          "max": 1,
+        },      
+      },
+    ],
+    "vue/first-attribute-linebreak": [
+      "error",
+      {
+        "singleline": "ignore",
+        "multiline": "below",
+      },
+    ],
+    "vue/html-closing-bracket-newline": [
+      "error",
+      {
+        "singleline": "never",
+        "multiline": "always",
+      },
+    ],
+    "vue/html-self-closing": [
+      "error",
+      {
+        "html": {
+          "void": "never",
+          "normal": "always",
+          "component": "always",
+        },
+        "svg": "always",
+        "math": "always",
+      },
+    ],
     'vue/component-name-in-template-casing': [
       'error',
       'kebab-case',

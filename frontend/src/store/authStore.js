@@ -52,12 +52,9 @@ export const useAuthStore = defineStore('authStore', {
       
     },
 
-    async logout(apiCall = true) {
+    async logout() {
       this.isLogged = false;
       try {
-        if (apiCall) {
-          await $API.post('auth/logout/');
-        }
         Cookies.remove(import.meta.env.VITE_COOKIE_TOKEN_NAME);
       } catch (error) {
         Cookies.remove(import.meta.env.VITE_COOKIE_TOKEN_NAME);
@@ -65,8 +62,12 @@ export const useAuthStore = defineStore('authStore', {
       }
     },
 
-    initLogged() {
-      this.isLogged = !!Cookies.get(import.meta.env.VITE_COOKIE_TOKEN_NAME);
+    init() {
+      const token = Cookies.get(import.meta.env.VITE_COOKIE_TOKEN_NAME);
+      if (token) {
+        this.isLogged = true;
+      }
     },
+    
   },
 });
