@@ -47,7 +47,6 @@ class PostController extends AbstractController
             }
         }
 
-
         $post->setTitle($data['title']);
         $post->setContent($data['content']);
         $post->setAuthor($user);
