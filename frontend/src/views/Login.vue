@@ -5,8 +5,8 @@
       <el-form-item label="Email" prop="email">
         <el-input v-model="form.email" />
       </el-form-item>
-      <el-form-item label="Password" prop="password">
-        <el-input v-model="form.password" type="password" autocomplete="off" />
+      <el-form-item label="Password" prop="pwd">
+        <el-input v-model="form.pwd" type="password" autocomplete="off" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Login</el-button>
@@ -43,7 +43,7 @@ export default {
           trigger: [ 'blur', 'change' ], 
         },
       ],
-      password: [
+      pwd: [
         {
           required: true,
           message: 'Veuillez renseigner un mot de passe',
