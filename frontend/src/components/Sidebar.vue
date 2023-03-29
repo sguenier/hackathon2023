@@ -1,6 +1,6 @@
 <template>
   <nav class="sidebar">
-    <div class="sidebar__list sidebar__menu">
+    <div class="sidebar__list">
       <router-link
         class="sidebar__list__link"
         v-for="{ name, label, icon } in filteredMenuItems"
