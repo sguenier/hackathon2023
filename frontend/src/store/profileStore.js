@@ -12,6 +12,8 @@ export const useProfileStore = defineStore('profileStore', {
     async getProfile() {
       this.isProfileLoading = true;
       try {
+        // uncomment to fake long request for showing app loading
+        await new Promise((resolve) => setTimeout(resolve, 800));
         const { data } = await $API.get('admin/user/profile/');
         this.profile = data;
         this.isProfileLoading = false;
