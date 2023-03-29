@@ -16,19 +16,23 @@ export const useAuthStore = defineStore('authStore', {
       this.ephemeralToken = '';
       this.isLoginLoading = true;
       try {
-        const { data } = await $API.post('auth/login/', form);
-        if (data.auth_token) {
+        // const { data } = await $API.post('admin/user/login/', form);
+        const data = {
+          token: 'token_provisoire',
+          message: 'Log ok !',
+        }
+        if (data.token) {
           this.isLogged = true;
           Cookies.set(
             import.meta.env.VITE_COOKIE_TOKEN_NAME,
-            data.auth_token,
+            data.token,
             {
               expires: parseFloat(import.meta.env.VITE_COOKIE_TOKEN_DURATION, 10),
               secure: true,
             },
           );
         } else {
-          this.ephemeralToken = data.ephemeral_token;
+          throw new Error('No token found');
         }
         this.isLoginLoading = false;
         return data;

@@ -13,7 +13,7 @@ export default defineConfig({
     port: 8080,
     proxy: {
       '^/api': {
-        target: 'https://jsonplaceholder.typicode.com',
+        target: 'https://localhost/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
@@ -22,7 +22,7 @@ export default defineConfig({
   preview: {
     proxy: {
       '^/api': {
-        target: 'https://jsonplaceholder.typicode.com',
+        target: 'https://localhost/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
