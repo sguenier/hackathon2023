@@ -5,6 +5,7 @@ export default [
   {
     name: 'home',
     label: 'Accueil',
+    icon: 'home',
   },
   // {
   //   name: 'programs',
