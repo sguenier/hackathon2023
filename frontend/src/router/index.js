@@ -26,6 +26,16 @@ const router = createRouter({
       name: 'formExample',
       component: () => import('@/views/FormExample.vue'),
     },
+    {
+      path: '/advises',
+      name: 'advises',
+      component: () => import('@/views/Advises.vue'),
+    },
+    // {
+    //   path: '/:pathMatch(.*)*',
+    //   name: 'not-found',
+    //   component: () => import('@/views/NotFound.vue'),
+    // },
   ],
 })
 

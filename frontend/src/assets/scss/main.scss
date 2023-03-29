@@ -81,5 +81,15 @@ body, html {
 
   #app {
     height: 100%;
+
+    h2 {
+      color: var(--text-primary-light);
+      margin-top: 0;
+
+      @media (max-width: 768px) {
+        margin: 0;
+        text-align: center;
+      }
+    }
   }
 }
