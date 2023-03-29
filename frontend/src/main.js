@@ -12,6 +12,7 @@ import App from '@/App.vue';
 import $API from '@/plugins/axios';
 import addInterceptors from '@/plugins/interceptors';
 import router from '@/router';
+import { useAuthStore } from '@/store/authStore';
 import { QuillEditor } from '@vueup/vue-quill';
 
 const app = createApp(App);
@@ -25,4 +26,8 @@ app.use(createPinia())
 app.use(router)
 addInterceptors($API, router);
 
-app.mount('#app')
+app.mount('#app');
+
+const authStore = useAuthStore();
+
+authStore.init();

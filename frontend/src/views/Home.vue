@@ -7,7 +7,7 @@
 <script>
 import {
   computed,
-  onMounted
+  onMounted,
 } from 'vue';
 
 import { useBlogStore } from '@/store/blogStore';
@@ -18,7 +18,7 @@ export default {
     const blogStore = useBlogStore();
 
     onMounted(async () => {
-      await blogStore.getPost(1);
+      // await blogStore.getPost(1);
     });
 
     const post = computed(() => blogStore.post);
@@ -26,7 +26,7 @@ export default {
     return {
       blogStore,
       post,
-      isPostLoading
+      isPostLoading,
     }
   },
 }
