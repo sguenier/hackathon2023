@@ -1,5 +1,5 @@
 /* eslint-env node */
-require('@rushstack/eslint-patch/modern-module-resolution')
+require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
   root: true,
@@ -104,5 +104,7 @@ module.exports = {
         'minItems': 3, 
       },
     ],
+    'arrow-body-style': [ 'error', 'as-needed' ],
+    'semi': [ 'error', 'always' ],
   },
-}
+};
