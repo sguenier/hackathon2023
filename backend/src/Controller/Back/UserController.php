@@ -22,14 +22,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 class UserController extends AbstractController
 {
 
-    #[Route('/index', name: 'user_index', methods: ['GET']) ]
-    public function index(UserRepository $userRepository, Request $request): Response
-    {
-
-        return $this->render('Back/user/index.html.twig');
-
-    }
-
     #[Route('/createuser/', name: 'user_create', methods: ['POST']) ]
     public function create(UserRepository $userRepository, JobRepository $jobRepository, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -166,7 +158,7 @@ class UserController extends AbstractController
     {
 
         if ( isset($request->headers->all()['authorization'][0]) ) {
-            $token = str_replace("Basic ", "", $request->headers->all()['authorization'][0]);
+            $token = str_replace("Bearer ", "", $request->headers->all()['authorization'][0]);
         } else {
             $resp = array(
                 "message" => "The authentification token is missing ffrom the headers."

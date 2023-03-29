@@ -59,6 +59,20 @@ class JobRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+    * @return Job[] Returns an array of Job objects
+    */
+    public function findByIntern($intern): array
+    {
+        return $this->createQueryBuilder('j')
+            ->andWhere('j.intern = :intern')
+            ->setParameter('intern', $intern)
+            ->orderBy('j.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 
 //    /**
 //     * @return Job[] Returns an array of Job objects
