@@ -64,11 +64,11 @@ export default {
   grid-template-areas: "topbar topbar" "sidebar main";
   grid-template-rows: auto 1fr;
   grid-template-columns: 200px 1fr;
-  height: 100%;
+  min-height: 100%;
 
   @media (max-width: 768px) {
     grid-template-areas: "topbar" "main";
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto 1fr;
     grid-template-columns: 1fr;
   }
 
@@ -87,6 +87,7 @@ export default {
 
     @media (max-width: 768px) {
       padding: 24px 16px;
+      // padding: 8px 8px 132px 8px;
     }
   }
 }

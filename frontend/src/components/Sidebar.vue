@@ -1,14 +1,19 @@
 <template>
   <nav class="sidebar">
-    <div class="sidebar__list">
+    <div class="sidebar__list sidebar__menu">
       <router-link
         class="sidebar__list__link"
-        v-for="{ name, label } in filteredMenuItems"
+        v-for="{ name, label, icon } in filteredMenuItems"
         :key="name"
         :class="{ 'sidebar__list__link--active': activeRouteName === name}"
         :to="{ name }"
       >
-        <span>
+        <vue-feather
+          v-if="isSmallScreen"
+          size="26"
+          :type="icon"
+        /> 
+        <span>  
           {{ label }}
         </span>
       </router-link>
@@ -19,6 +24,12 @@
         class="sidebar__list__link"
       >
         <vue-feather
+          v-if="isSmallScreen"
+          size="26"
+          type="user"
+        />
+        <vue-feather
+          v-else
           size="16"
           type="user"
         />
@@ -41,6 +52,12 @@
         @click="logout"
       >
         <vue-feather
+          v-if="isSmallScreen"
+          size="26"
+          type="log-out"
+        />
+        <vue-feather
+          v-else
           size="16"
           type="log-out"
         />
@@ -51,7 +68,7 @@
 </template>
 
 <script>
-import { computed } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 
 import { useRouter } from 'vue-router';
 
@@ -81,11 +98,30 @@ export default {
       router.push({ name: 'Login' });
     }
 
+    const screenWidth = ref(window.innerWidth);
+
+    const updateScreenWidth = () => {
+      screenWidth.value = window.innerWidth;
+    };
+
+    onMounted(() => {
+      window.addEventListener('resize', updateScreenWidth);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', updateScreenWidth);
+    });
+
+    const isSmallScreen = computed(() => {
+      return screenWidth.value < 768;
+    });
+    
     return {
       logout,
       filteredMenuItems,
       isLogged,
       activeRouteName,
+      isSmallScreen,
     };
   },
 };
@@ -134,6 +170,40 @@ export default {
         border-left: 4px solid var(--color-blue-action);
         padding-left: 20px;
       }
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    background-color: var(--text-white);
+    height: unset;
+    width: 100%;
+    padding: 0 24px 12px 24px;
+    border-top-right-radius: 24px;
+    border-top-left-radius: 24px;
+    box-shadow: 0px 0px 2px rgba(23, 43, 77, 0.04), 0px -3px 2px rgba(23, 43, 77, 0.08);
+
+    &__list {
+      flex-direction: row;
+      &__link {
+        padding-top: 12px;
+        flex-direction: column;
+        height: unset;
+        background-color: unset;
+      }
+
+      &__link--active {
+        border-left: none;
+        border-top: 4px solid var(--color-blue-action)
+      }
+
+    }
+
+    &__menu {
+      display: flex;
+      flex-direction: column;
     }
   }
 }
