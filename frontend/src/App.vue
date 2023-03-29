@@ -1,6 +1,6 @@
 <template>
   <div class="jaji-app">
-    <div class="jaji-app__topbar">Topbar</div>
+    <topbar class="jaji-app__topbar" />
     <sidebar class="jaji-app__sidebar" />
     <main class="jaji-app__main">
       <router-view />
@@ -10,6 +10,7 @@
 
 <script>
 import { RouterView } from 'vue-router';
+import Topbar from '@/components/Topbar.vue';
 
 import Sidebar from './components/Sidebar.vue';
 
@@ -18,8 +19,9 @@ export default {
   components: {
     RouterView,
     Sidebar,
+    Topbar,
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
