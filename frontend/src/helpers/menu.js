@@ -19,5 +19,6 @@ export default [
   {
     name: 'advises',
     label: 'Conseils',
+    icon: 'aperture',
   },
 ];
