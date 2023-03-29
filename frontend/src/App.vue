@@ -1,13 +1,11 @@
 <template>
-  <header>
-    <h1>Hackaton 2023</h1>
-    <ul>
-        <li><router-link to="/">Home</router-link></li>
-      <li><router-link to="/form">Form Example</router-link></li>
-    </ul>
-  </header>
-
-  <router-view />
+  <div class="jaji-app">
+    <div class="jaji-app__topbar">Topbar</div>
+    <div class="jaji__sidebar">sidebar</div>
+    <main class="jaji-app__main">
+      <router-view />
+    </main>
+  </div>
 </template>
 
 <script>
@@ -16,71 +14,29 @@ import { RouterView } from 'vue-router';
 export default {
   name: 'App',
   components: {
-    RouterView
+    RouterView,
   },
 }
 </script>
 
 <style lang="scss" scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
+.jaji-app {
+  display: grid;
+  grid-template-areas: "topbar topbar" "sidebar main";
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 200px 1fr;
+  height: 100%;
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+  &__topbar {
+    grid-area: topbar;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
+  &__sidebar {
+    grid-area: sidebar;
   }
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+  &__main {
+    grid-area: main;
   }
 }
 </style>
