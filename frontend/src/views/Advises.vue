@@ -23,7 +23,7 @@ import {
   ref,
 } from 'vue';
 
-import Advise from '@/components/Advise.vue';
+import Advise from '@/components/Card.vue';
 import JajiTabs from '@/components/JajiTabs.vue';
 import { useAuthStore } from '@/store/authStore';
 import { useBlogStore } from '@/store/blogStore';

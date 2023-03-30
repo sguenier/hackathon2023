@@ -1,24 +1,24 @@
 <template>
   <div
-    class="advise"
+    class="card"
     @click="$emit('click')"
   >
     <img
-      class="advise__image"
+      class="card__image"
       :src="image"
       :alt="title"
     >
-    <span class="advise__title" >{{ title }}</span>
+    <span class="card__title" >{{ title }}</span>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Advise',
+  name: 'Card',
   emits: [ 'click' ],
   props: {
     /**
-     * The image of the advise.
+     * The image of the card.
      * @type {string}
      */
     image: {
@@ -26,7 +26,7 @@ export default {
       required: true,
     },
     /**
-     * The title of the advise.
+     * The title of the card.
      * @type {string}
      */
     title: {
@@ -38,7 +38,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.advise {
+.card {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -65,11 +65,11 @@ export default {
   }
 
   &:hover {
-    .advise__image {
+    .card__image {
       opacity: 0.8;
     }
 
-    .advise__title {
+    .card__title {
       text-decoration: underline;
     }
   }
