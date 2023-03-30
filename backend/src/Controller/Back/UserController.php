@@ -42,6 +42,15 @@ class UserController extends AbstractController
         //cas ou l'user n'existe pas on le crée
         if ( count($missing_param) == 0 && is_null($userRepository->findOneByEmail($params['email'])) ) {
             if ( $params['pwd'] == $params['pwdconfirm'] ) {
+
+                if ( $params['sex']!="male" && $params['sex']!="female" ) {
+                    $resp = array(
+                        "message"=>"The value of sex parameter must be one of the following 'female', 'male'."
+                    );
+            
+                    return new JsonResponse($resp, 400);
+                }
+
                 $user = new User();
 
                 $pwd = $passwordHasher->hashPassword($user, $params['pwd']);
@@ -188,13 +197,20 @@ class UserController extends AbstractController
 
         if ( $user->getSessionToken() == $token ) {
 
+            $job = (!is_null($user->getJob()))?["id"=>$user->getJob()->getId(),"name"=>$user->getJob()->getName()]:null;
+
             $tabUser = array(
                 "email"=>$user->getEmail(),
                 "role"=>$user->getRoles(),
                 "lastname"=>$user->getLastname(),
                 "firstname"=>$user->getFirstname(),
-                "job"=>["id"=>$user->getJob()->getId(),"name"=>$user->getJob()->getName()],
-                "socialSecurityNumber"=>$user->getSocialSecurityNumber()
+                "job"=>$job,
+                "socialSecurityNumber"=>$user->getSocialSecurityNumber(),
+                "sex"=>$user->getSex(),
+                "phonenumber"=>$user->getPhonenumber(),
+                "doctor"=>$user->getDoctor(),
+                "size"=>$user->getSize(),
+                "weight"=>$user->getWeight()
             );
 
             $resp = array(
