@@ -24,7 +24,7 @@ class PostController extends AbstractController
         return $this->json($postRepository->findAll());
     }
 
-    #[Route('/new', name: 'app_post_new', methods: ['POST'])]
+    #[Route('/new/', name: 'app_post_new', methods: ['POST'])]
     public function new(Request $request, PostRepository $postRepository, UserRepository $userRepository): Response
     {
 
@@ -62,7 +62,7 @@ class PostController extends AbstractController
         
     }
 
-    #[Route('/{id}', name: 'app_post_show', methods: ['GET'])]
+    #[Route('/{id}/', name: 'app_post_show', methods: ['GET'])]
     public function show(Post $post): Response
     {
         $jsonedPost = [
@@ -76,7 +76,7 @@ class PostController extends AbstractController
         return new JsonResponse($jsonedPost); 
     }
 
-    #[Route('/{id}/edit', name: 'app_post_edit', methods: ['PUT'])]
+    #[Route('/{id}/edit/', name: 'app_post_edit', methods: ['PUT'])]
     public function edit(Request $request, Post $post, PostRepository $postRepository, UserRepository $userRepository): Response
     {
        
@@ -106,7 +106,7 @@ class PostController extends AbstractController
             return new JsonResponse(['message' => 'Post updated'], 200);
     }
 
-    #[Route('/{id}', name: 'app_post_delete', methods: ['DELETE'])]
+    #[Route('/{id}/', name: 'app_post_delete', methods: ['DELETE'])]
     public function delete(Request $request, Post $post, PostRepository $postRepository , UserRepository $userRepository): Response
     {
         if (!$request->headers->has('Authorization')) {
