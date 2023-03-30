@@ -1,5 +1,5 @@
 <template>
-  <main class="exercices">
+  <div class="exercices">
     <h2 class="exercices__title">Exercices</h2>
     <p class="exercices__filter">Filtrer par :</p>
     <el-select
@@ -24,7 +24,7 @@
       />
     </div>
 
-  </main>
+  </div>
 </template>
 
 <script>
