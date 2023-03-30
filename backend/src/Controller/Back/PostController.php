@@ -28,8 +28,9 @@ class PostController extends AbstractController
     public function new(Request $request, PostRepository $postRepository, UserRepository $userRepository): Response
     {
 
-        // GET json body from the post request
-        $data = json_decode($request->getContent(), true);
+ 
+        $data = json_decode($request->request->get('JSON'), true);
+        // content is now in the JSON format in a multipart form, index is "JSON"
         $post = new Post();
 
         if (!isset($data['title']) || !isset($data['content']) ) {
@@ -47,9 +48,41 @@ class PostController extends AbstractController
             }
         }
 
+        $image = $request->files->get('image');
+        // check if the image is valid
+        if($image != null) {
+            $imageSize = $image->getSize();
+            $imageType = $image->getMimeType();
+            if($imageSize > 1000000) {
+                return new JsonResponse(['error' => 'Image too big'], 400);
+            }
+            if($imageType != 'image/jpeg' && $imageType != 'image/png') {
+                return new JsonResponse(['error' => 'Invalid image type'], 400);
+            }   
+
+            // generate a random name for the image
+            $imageName = md5(uniqid()) . '.' . $image->guessExtension();
+
+        // move the image to the public images folder /images
+            $image->move(
+                $this->getParameter('posts_directory'),
+                $imageName
+            );
+
+
+            if(!file_exists($this->getParameter('posts_directory') . '/' . $imageName)) {
+                return new JsonResponse(['error' => 'Image not saved'], 400);
+            }
+
+        }else{
+            return new JsonResponse(['error' => 'Missing image'], 400);
+        }
+
         $post->setTitle($data['title']);
         $post->setContent($data['content']);
         $post->setAuthor($user);
+        // set image to empty
+        $post->setImage($imageName);
         $post->setCreatedAt(new \DateTimeImmutable());
 
         // create the post
@@ -69,6 +102,7 @@ class PostController extends AbstractController
             'id' => $post->getId(),
             'title' => $post->getTitle(),
             'content' => $post->getContent(),
+            'image' => $post->getImage(),
             'created_at' => $post->getCreatedAt()
         ]; 
         // 'author' => $post->getAuthor()->getUsername(),
