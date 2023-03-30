@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class PostController extends AbstractController
 {
     //rajouter verif CSRF sur les routes
-    #[Route('/', name: 'app_post_index', methods: ['GET'])]
+    #[Route('s/', name: 'app_post_index', methods: ['GET'])]
     public function index(PostRepository $postRepository): Response
     {
         // return json response
@@ -45,7 +45,7 @@ class PostController extends AbstractController
             return new JsonResponse(['error' => 'Missing authorization header'], 400);
         }else{
             $token = $request->headers->get('Authorization');
-            $token = str_replace('Basic ', '', $token);
+            $token = str_replace('Bearer ', '', $token);
             $user = $userRepository->findOneBy(['session_token' => $token]);
             if($user == null) {
                 return new JsonResponse(['error' => 'Invalid token'], 400);
@@ -110,14 +110,13 @@ class PostController extends AbstractController
         return new JsonResponse($jsonedPost); 
     }
 
-    #[Route('/{id}/edit/', name: 'app_post_edit', methods: ['POST'])]
+    #[Route('/{id}/', name: 'app_post_edit', methods: ['POST'])]
     public function edit(Request $request, Post $post, PostRepository $postRepository, UserRepository $userRepository): Response
     {
        
-        
         $data['title'] = $request->request->get('title') ?? null;
         $data['content'] = $request->request->get('content') ?? null;
-
+        
         if (!isset($data['title']) || !isset($data['content']) ) {
             return new JsonResponse(['error' => 'Missing required fields'], 400);
         }
@@ -127,7 +126,7 @@ class PostController extends AbstractController
             return new JsonResponse(['error' => 'Missing authorization header'], 400);
         }else{
             $token = $request->headers->get('Authorization');
-            $token = str_replace('Basic ', '', $token);
+            $token = str_replace('Bearer ', '', $token);
             $user = $userRepository->findOneBy(['session_token' => $token]);
             if($user == null) {
                 return new JsonResponse(['error' => 'Invalid token'], 400);
@@ -170,7 +169,15 @@ class PostController extends AbstractController
 
             // $post->setUpdatedAt(new \DateTimeImmutable());
             $postRepository->save($post, true);
-            return new JsonResponse(['message' => 'Post updated'], 200);
+            // return the updated post
+            $jsonedPost = [
+                'id' => $post->getId(),
+                'title' => $post->getTitle(),
+                'content' => $post->getContent(),
+                'image' => $post->getImage(),
+                'created_at' => $post->getCreatedAt()
+            ];
+            return new JsonResponse($jsonedPost);
     }
 
     #[Route('/{id}/', name: 'app_post_delete', methods: ['DELETE'])]
@@ -180,7 +187,7 @@ class PostController extends AbstractController
             return new JsonResponse(['error' => 'Missing authorization header'], 400);
         }else{
             $token = $request->headers->get('Authorization');
-            $token = str_replace('Basic ', '', $token);
+            $token = str_replace('Bearer ', '', $token);
             $user = $userRepository->findOneBy(['session_token' => $token]);
             if($user == null) {
                 return new JsonResponse(['error' => 'Invalid token'], 400);

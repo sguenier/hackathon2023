@@ -15,14 +15,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 #[Route('/tag')]
 class TagController extends AbstractController
 {
-    #[Route('/', name: 'app_tag_index', methods: ['GET'])]
+    #[Route('s/', name: 'app_tag_index', methods: ['GET'])]
     public function index(TagRepository $tagRepository): Response
     {
         return $this->json($tagRepository->findAll());
 
     }
 
-    #[Route('/new/', name: 'app_tag_new', methods: ['POST'])]
+    #[Route('/', name: 'app_tag_new', methods: ['POST'])]
     public function new(Request $request, TagRepository $tagRepository, UserRepository $userRepository): Response
     {
       
@@ -37,7 +37,7 @@ class TagController extends AbstractController
             return new JsonResponse(['error' => 'Missing authorization header'], 400);
         }else{
             $token = $request->headers->get('Authorization');
-            $token = str_replace('Basic ', '', $token);
+            $token = str_replace('Bearer ', '', $token);
             $user = $userRepository->findOneBy(['session_token' => $token]);
             if($user == null) {
                 return new JsonResponse(['error' => 'Invalid token'], 400);
@@ -71,7 +71,7 @@ class TagController extends AbstractController
        return new JsonResponse($jsonedTag, 200);
     }
 
-    #[Route('/{id}/edit/', name: 'app_tag_edit', methods: ['PUT'])]
+    #[Route('/{id}/', name: 'app_tag_edit', methods: ['PUT'])]
     public function edit(Request $request, Tag $tag, TagRepository $tagRepository, UserRepository $userRepository): Response
     {
        $data = json_decode($request->getContent(), true);
@@ -84,7 +84,7 @@ class TagController extends AbstractController
               return new JsonResponse(['error' => 'Missing authorization header'], 400);
             }else{
                 $token = $request->headers->get('Authorization');
-                $token = str_replace('Basic ', '', $token);
+                $token = str_replace('Bearer ', '', $token);
                 $user = $userRepository->findOneBy(['session_token' => $token]);
                 if($user == null) {
                     return new JsonResponse(['error' => 'Invalid token'], 400);
@@ -114,7 +114,7 @@ class TagController extends AbstractController
             return new JsonResponse(['error' => 'Missing authorization header'], 400);
         }else{
             $token = $request->headers->get('Authorization');
-            $token = str_replace('Basic ', '', $token);
+            $token = str_replace('Bearer ', '', $token);
             $user = $userRepository->findOneBy(['session_token' => $token]);
             if($user == null) {
                 return new JsonResponse(['error' => 'Invalid token'], 400);
