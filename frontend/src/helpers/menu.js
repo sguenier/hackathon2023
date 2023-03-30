@@ -21,4 +21,9 @@ export default [
     label: 'Conseils',
     icon: 'aperture',
   },
+  {
+    name: 'exercices',
+    label: 'Exercices',
+    icon: 'heart',
+  },
 ];

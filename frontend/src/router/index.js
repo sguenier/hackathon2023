@@ -71,6 +71,11 @@ const router = createRouter({
       name: 'exercices',
       component: () => import('@/views/Exercices.vue'),
     },
+    {
+      path: '/exercice/:id',
+      name: 'exercice',
+      component: () => import('@/views/Exercice.vue'),
+    },
     // {
     //   path: '/:pathMatch(.*)*',
     //   name: 'not-found',
