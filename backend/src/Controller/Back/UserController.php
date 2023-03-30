@@ -27,8 +27,9 @@ class UserController extends AbstractController
     {
 
         $params = json_decode($request->getContent(), true);
+        $params = array_map('trim',$params);
 
-        $req_params = ["pwd","pwdconfirm","socialsecuritynumber","email","firstname","lastname","job"];
+        $req_params = ["pwd","pwdconfirm","socialsecuritynumber","email","firstname","lastname","sex","birthdate","doctor"];
 
         $missing_param = array();
 
@@ -49,10 +50,18 @@ class UserController extends AbstractController
                 $user->setPassword($pwd);
                 $user->setLastname($params['lastname']);
                 $user->setFirstname($params['firstname']);
+                $user->setSex($params['sex']);
+                $user->setDoctor($params['doctor']);
+                $user->setBirthdate(DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $params['birthdate']));
 
-                $job = $jobRepository->findOneById($params["job"]);
+                //param nullable
+                $user->setPhonenumber((isset($params['phonenumber']) && $params['phonenumber']!="")?$params['phonenumber']:null);
+                $user->setSize((isset($params['size']) && $params['size']!="")?$params['size']:null);
+                $user->setWeight((isset($params['weight']) && $params['weight']!="")?$params['weight']:null);
 
-                if ( is_null($job) ) {
+                $job = (isset($params["job"]))?$jobRepository->findOneById($params["job"]):null;
+
+                if ( isset($params["job"]) && is_null($job) ) {
                     $resp = array(
                         "message" => "The Job provided is not in the list."
                     );
