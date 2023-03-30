@@ -5,6 +5,7 @@ import $API from '@/plugins/axios';
 
 export const useAuthStore = defineStore('authStore', {
   state: () => ({
+    registerProfile: {},
     isLogged: false,
     isLoginLoading: false,
     ephemeralToken: '',
@@ -12,6 +13,9 @@ export const useAuthStore = defineStore('authStore', {
   }),
 
   actions: {
+    async setRegisterProfile(profile) {
+      this.registerProfile = profile;
+    },
     async login(form) {
       this.ephemeralToken = '';
       this.isLoginLoading = true;

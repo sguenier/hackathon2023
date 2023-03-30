@@ -12,6 +12,7 @@
       >
     </router-link>
     <div class="topbar__container">
+      <button @click="logout">LOGOUT</button>
       <vue-feather
         class="topbar__search"
         size="24"
@@ -55,8 +56,13 @@ export default {
 
     const isLogged = computed(() => authStore.isLogged);
     const profile = computed(() => profileStore.profile);
+    const logout = () => {
+      authStore.logout();
+
+    };
 
     return {
+      logout,
       profile,
       isLogged,
     };

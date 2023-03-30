@@ -5,24 +5,6 @@ import {
 
 import { useAuthStore } from '@/store/authStore';
 
-const isNotLogged = (to, from, next) => {
-  const authStore = useAuthStore();
-  if (authStore.isLogged) {
-    next({ name: 'home' });
-  } else {
-    next();
-  }
-};
-
-const isLogged = (to, from, next) => {
-  const authStore = useAuthStore();
-  if (authStore.isLogged) {
-    next();
-  } else {
-    next({ name: 'login' });
-  }
-};
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -35,19 +17,60 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('@/views/Login.vue'),
-      beforeEnter: isNotLogged,
     },
     {
       path: '/register',
       name: 'register',
+      redirect: () => ({ name: 'register-base' }),
       component: () => import('@/views/Register.vue'),
-      beforeEnter: isNotLogged,
+      children: [
+        {
+          path: 'base',
+          name: 'register-base',
+          component: () => import('@/views/Register/RegisterBase.vue'),
+        },
+        {
+          path: 'personal',
+          name: 'register-personal',
+          component: () => import('@/views/Register/RegisterPersonal.vue'),
+          beforeEnter: (to, from, next) => {
+            if (from.name === 'register-base') {
+              next();
+            } else {
+              next({ name: 'register-base' });
+            }
+          },
+        },
+        {
+          path: 'care',
+          name: 'register-care',
+          component: () => import('@/views/Register/RegisterCare.vue'),
+          beforeEnter: (to, from, next) => {
+            if (from.name === 'register-personal') {
+              next();
+            } else {
+              next({ name: 'register-personal' });
+            }
+          },
+        },
+        {
+          path: 'tags',
+          name: 'register-tags',
+          component: () => import('@/views/Register/RegisterTags.vue'),
+          beforeEnter: (to, from, next) => {
+            if (from.name === 'register-care') {
+              next();
+            } else {
+              next({ name: 'register-care' });
+            }
+          },
+        },
+      ],
     },
     {
       path: '/profile',
       name: 'profile',
       component: () => import('@/views/Profile.vue'),
-      beforeEnter: isLogged,
       children: [
         {
           path: 'edit',
@@ -82,6 +105,17 @@ const router = createRouter({
     //   component: () => import('@/views/NotFound.vue'),
     // },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
+  if (authStore.isLogged) {
+    next();
+  } else if (to.name === 'login' || to.name.startsWith('register')) {
+    next();
+  } else {
+    next({ name: 'login' });
+  }
 });
 
 export default router;
