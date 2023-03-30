@@ -28,9 +28,13 @@ class PostController extends AbstractController
     public function new(Request $request, PostRepository $postRepository, UserRepository $userRepository): Response
     {
 
- 
-        $data = json_decode($request->request->get('JSON'), true);
-        // content is now in the JSON format in a multipart form, index is "JSON"
+        $data['title'] = $request->request->get('title') ?? null;
+        $data['content'] = $request->request->get('content') ?? null;
+
+        if($data['title'] == null || $data['content'] == null) {
+            return new JsonResponse(['error' => 'Missing required fields'], 400);
+        }
+
         $post = new Post();
 
         if (!isset($data['title']) || !isset($data['content']) ) {
@@ -49,26 +53,22 @@ class PostController extends AbstractController
         }
 
         $image = $request->files->get('image');
-        // check if the image is valid
         if($image != null) {
             $imageSize = $image->getSize();
             $imageType = $image->getMimeType();
-            if($imageSize > 1000000) {
+            if($imageSize > 8000000) {
                 return new JsonResponse(['error' => 'Image too big'], 400);
             }
             if($imageType != 'image/jpeg' && $imageType != 'image/png') {
                 return new JsonResponse(['error' => 'Invalid image type'], 400);
             }   
 
-            // generate a random name for the image
             $imageName = md5(uniqid()) . '.' . $image->guessExtension();
 
-        // move the image to the public images folder /images
             $image->move(
                 $this->getParameter('posts_directory'),
                 $imageName
             );
-
 
             if(!file_exists($this->getParameter('posts_directory') . '/' . $imageName)) {
                 return new JsonResponse(['error' => 'Image not saved'], 400);
@@ -110,11 +110,13 @@ class PostController extends AbstractController
         return new JsonResponse($jsonedPost); 
     }
 
-    #[Route('/{id}/edit/', name: 'app_post_edit', methods: ['PUT'])]
+    #[Route('/{id}/edit/', name: 'app_post_edit', methods: ['POST'])]
     public function edit(Request $request, Post $post, PostRepository $postRepository, UserRepository $userRepository): Response
     {
        
-        $data = json_decode($request->getContent(), true);
+        
+        $data['title'] = $request->request->get('title') ?? null;
+        $data['content'] = $request->request->get('content') ?? null;
 
         if (!isset($data['title']) || !isset($data['content']) ) {
             return new JsonResponse(['error' => 'Missing required fields'], 400);
@@ -130,6 +132,37 @@ class PostController extends AbstractController
             if($user == null) {
                 return new JsonResponse(['error' => 'Invalid token'], 400);
             }
+        }
+
+
+        $image = $request->files->get('image');
+        if($image != null) {
+            $imageSize = $image->getSize();
+            $imageType = $image->getMimeType();
+            if($imageSize > 8000000) {
+                return new JsonResponse(['error' => 'Image too big'], 400);
+            }
+            if($imageType != 'image/jpeg' && $imageType != 'image/png') {
+                return new JsonResponse(['error' => 'Invalid image type'], 400);
+            }   
+
+            $imageName = md5(uniqid()) . '.' . $image->guessExtension();
+
+            $image->move(
+                $this->getParameter('posts_directory'),
+                $imageName
+            );
+
+            if(!file_exists($this->getParameter('posts_directory') . '/' . $imageName)) {
+                return new JsonResponse(['error' => 'Image not saved'], 400);
+            }else{
+                  // remove the old image
+                if(file_exists($this->getParameter('posts_directory') . '/' . $post->getImage())) {
+                    unlink($this->getParameter('posts_directory') . '/' . $post->getImage());
+                }
+            }
+
+            $post->setImage($imageName);
         }
         
             $post->setTitle($data['title']);
@@ -153,7 +186,24 @@ class PostController extends AbstractController
                 return new JsonResponse(['error' => 'Invalid token'], 400);
             }
         }
-            $postRepository->remove($post, true);
+
+        if($post->getImage() != null){
+            $imagepath = $this->getParameter('posts_directory') . '/' . $post->getImage();
+        }else{
+            $imagepath = null;
+        }
+
+        $postRepository->remove($post, true);
+        if($post->getId() != null) {
+            return new JsonResponse(['error' => 'Post not deleted'], 400);
+        }else{
+            if($imagepath != null){
+                if(file_exists($imagepath)) {
+                    unlink($imagepath);
+                }
+            }
+           
             return $this->json(['message' => 'Post deleted']);
+        }
     }
 }
