@@ -1,34 +1,51 @@
 <template>
   <main>
-    <h2>Login</h2>
+    <h3>Connexion</h3>
+    <h1>Espace adhérent</h1>
     <el-form
       ref="loginForm"
+      class="login-form"
       :rules="rules"
       :model="form"
-      label-width="120px"
     >
       <el-form-item
-        label="Email"
         prop="email"
       >
-        <el-input v-model="form.email" />
+        <el-input
+          class="login-form__input"
+          v-model="form.email"
+          placeholder="Email"
+          size="large"
+        />
       </el-form-item>
       <el-form-item
-        label="Password"
         prop="pwd"
       >
         <el-input
+          class="login-form__input"
           v-model="form.pwd"
           type="password"
           autocomplete="off"
+          placeholder="Mot de passe"
+          size="large"
         />
       </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
           @click="onSubmit"
-        >Login</el-button>
+          size="large"
+        >
+          Connexion
+        </el-button>
       </el-form-item>
+      <el-button
+        text
+        @click="$router.push({ name: 'register' })"
+        size="large"
+      >
+        Pas encore inscrit ?
+      </el-button>
     </el-form>
   </main>
 </template>
@@ -99,4 +116,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__input {
+    width: 300px;
+  }
+}
 </style>

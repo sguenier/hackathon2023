@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 
 import $API from '@/plugins/axios';
+import { useAuthStore } from '@/store/authStore';
 
 export const useProfileStore = defineStore('profileStore', {
   state: () => ({
@@ -19,6 +20,9 @@ export const useProfileStore = defineStore('profileStore', {
         this.isProfileLoading = false;
         return data;
       } catch (error) {
+        if (error.response.status === 404) {
+          useAuthStore().logout();
+        }
         this.isProfileLoading = false;
         throw error;
       }

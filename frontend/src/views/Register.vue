@@ -1,44 +1,36 @@
 <template>
   <main>
-    <h2>Register</h2>
-    <el-form ref="registerFrom" :rules="rules" :model="form" label-width="170px">
-      <el-form-item label="Email" prop="email">
-        <el-input v-model="form.email" />
-      </el-form-item>
-      <el-form-item label="Mot de passe" prop="pwd">
-        <el-input v-model="form.pwd" type="password" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="Confirmation du MdP" prop="pwdconfirm">
-        <el-input v-model="form.pwdconfirm" type="password" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="Prénom" prop="firstname">
-        <el-input v-model="form.firstname" />
-      </el-form-item>
-      <el-form-item label="Nom de Famille" prop="lastname">
-        <el-input v-model="form.lastname" />
-      </el-form-item>
-      <el-form-item label="Numéro de securité social" prop="socialsecuritynumber">
-        <el-input v-model="form.socialsecuritynumber" />
-      </el-form-item>
-      <el-form-item label="Poste occupé" prop="job">
-        <el-select v-model="form.job" placeholder="Poste occupé">
-          <el-option
-            v-for="job in jobs"
-            :key="job.id"
-            :label="job.name"
-            :value="job.id"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Register</el-button>
-      </el-form-item>
-    </el-form>
+    <h1>Bienvue sur votre suivi santé</h1>
+    <h3>Apprenons à mieux vous connaitre</h3>
+    <router-view
+      v-slot="{ Component }"
+    >
+      <transition-group
+        name="fade"
+        tag="div"
+      >
+        <component
+          :key="$route.path"
+          :is="Component"
+          v-model="form"
+          @next="nextStep"
+          @previous="previousStep"
+          @submit="submit"
+        />
+      </transition-group>
+    </router-view>
+    <div class="login-link">
+      <router-link :to="{ name: 'login' }">Déjà inscrit ?</router-link>
+    </div>
+    {{ form }}
   </main>
 </template>
 
 <script>
-import { ref } from 'vue';
+import {
+  computed,
+  ref,
+} from 'vue';
 
 import { useRouter } from 'vue-router';
 
@@ -47,64 +39,34 @@ import { useAuthStore } from '@/store/authStore';
 export default {
   name: 'Login',
   setup() {
-    const router = useRouter()
+    const router = useRouter();
     const authStore = useAuthStore();
     const form = ref({});
-    const registerFrom = ref(null);
-    const jobs = ref([
-      {
-        id: 1,
-        name: 'poubellier',
-      },
-    ])
 
-    const confirmPasswordValidator = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Veuillez confirmer le mot de passe'));
-      } else if (value !== form.value.pwd) {
-        callback(new Error('Les mots de passe ne correspondent pas!'));
-      } else {
-        callback();
-      }
+    const registerFrom = ref(null);
+
+    const actualRouteName = computed(() => router.currentRoute.value.name);
+
+    const registerRouteNames = [
+      'register-base',
+      'register-personal',
+      'register-care',
+      'register-tags',
+    ];
+
+    const registerProfile = computed(() => authStore.registerProfile);
+
+    const nextStep = async () => {
+      const currentRouteIndex = registerRouteNames.indexOf(actualRouteName.value);
+      await router.push({ name: registerRouteNames[currentRouteIndex + 1] });
+    };
+
+    const previousStep = () => {
+      const currentRouteIndex = registerRouteNames.indexOf(actualRouteName.value);
+      router.push({ name: registerRouteNames[currentRouteIndex - 1] });
     };
 
     const rules = ref({
-      email: [
-        {
-          required: true,
-          message: 'Veuillez renseigner un email',
-          trigger: 'blur', 
-        },
-        {
-          type: 'email',
-          message: 'Veuillez renseigner un email valide',
-          trigger: [ 'blur', 'change' ], 
-        },
-      ],
-      pwd: [
-        {
-          required: true,
-          message: 'Veuillez renseigner un mot de passe',
-          trigger: 'blur', 
-        },
-        {
-          min: 6,
-          max: 20,
-          message: 'Le mot de passe doit faire entre 6 et 20 caractere',
-          trigger: 'blur', 
-        },
-      ],
-      pwdconfirm: [
-        {
-          required: true,
-          message: 'Veuillez confirmer le mot de passe',
-          trigger: 'blur', 
-        },
-        {
-          validator: confirmPasswordValidator,
-          trigger: 'blur', 
-        },
-      ],
       firstname: [
         {
           required: true,
@@ -135,25 +97,28 @@ export default {
       job: [ { required: true, message: 'Veuillez renseigner un poste', trigger: 'change' } ],
     });
 
-    const onSubmit = () => {
-      registerFrom.value.validate(async (valid) => {
-        if (valid) {
-          await authStore.register(form.value);
-          router.push({ name: 'login' });
-        }
-      });
-    }
+    const submit = async () => {
+      await authStore.register(form.value);
+      router.push({ name: 'login' });
+    };
 
     return {
       rules,
       form,
       registerFrom,
-      onSubmit,
-      jobs,
-    }
+      submit,
+      nextStep,
+      previousStep,
+      registerProfile,
+    };
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
+.login-link {
+  text-align: right;
+  margin-top: 1rem;
+  padding: 0 48px;
+}
 </style>
