@@ -151,5 +151,6 @@ module.exports = {
         ],
       },
     ],
+    'no-else-return': 'error',
   },
 };
