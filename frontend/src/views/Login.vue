@@ -44,7 +44,7 @@ import { useProfileStore } from '@/store/profileStore';
 export default {
   name: 'Login',
   setup() {
-    const router = useRouter()
+    const router = useRouter();
     const authStore = useAuthStore();
     const profileStore = useProfileStore();
     const form = ref({});
@@ -76,7 +76,7 @@ export default {
           trigger: 'blur', 
         },
       ],
-    })
+    });
 
     const onSubmit = () => {
       loginForm.value.validate(async (valid) => {
@@ -86,16 +86,16 @@ export default {
           router.push({ name: 'home' });
         }
       });
-    }
+    };
 
     return {
       rules,
       form,
       loginForm,
       onSubmit,
-    }
+    };
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
