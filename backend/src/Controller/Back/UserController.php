@@ -113,7 +113,7 @@ class UserController extends AbstractController
 
     }
 
-    #[Route('/update/', name: 'user_update', methods: ['POST']) ]
+    #[Route('/update/', name: 'user_update', methods: ['PATCH']) ]
     public function update(UserRepository $userRepository, JobRepository $jobRepository, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
 
@@ -243,8 +243,11 @@ class UserController extends AbstractController
             $userRepository->save($user, true);
         }
 
+        $tabUser = $this->userToArray($user);
+
         $resp = array(
-            "message"=>"User updated with success."
+            "message"=>"User updated with success.",
+            "user" => $tabUser
         );
 
         return new JsonResponse($resp, 201);
@@ -334,21 +337,7 @@ class UserController extends AbstractController
 
         if ( $user->getSessionToken() == $token ) {
 
-            $job = (!is_null($user->getJob()))?["id"=>$user->getJob()->getId(),"name"=>$user->getJob()->getName()]:null;
-
-            $tabUser = array(
-                "email"=>$user->getEmail(),
-                "role"=>$user->getRoles(),
-                "lastname"=>$user->getLastname(),
-                "firstname"=>$user->getFirstname(),
-                "job"=>$job,
-                "socialSecurityNumber"=>$user->getSocialSecurityNumber(),
-                "sex"=>$user->getSex(),
-                "phonenumber"=>$user->getPhonenumber(),
-                "doctor"=>$user->getDoctor(),
-                "size"=>$user->getSize(),
-                "weight"=>$user->getWeight()
-            );
+            $tabUser = $this->userToArray($user);
 
             $resp = array(
                 "message" => "User accessed with success.",
@@ -364,6 +353,27 @@ class UserController extends AbstractController
 
             return new JsonResponse($resp, 403);
         }
+    }
+
+    public function userToArray($user)
+    {
+        $job = (!is_null($user->getJob()))?["id"=>$user->getJob()->getId(),"name"=>$user->getJob()->getName()]:null;
+
+        $tabUser = array(
+            "email"=>$user->getEmail(),
+            "role"=>$user->getRoles(),
+            "lastname"=>$user->getLastname(),
+            "firstname"=>$user->getFirstname(),
+            "job"=>$job,
+            "socialSecurityNumber"=>$user->getSocialSecurityNumber(),
+            "sex"=>$user->getSex(),
+            "phonenumber"=>$user->getPhonenumber(),
+            "doctor"=>$user->getDoctor(),
+            "size"=>$user->getSize(),
+            "weight"=>$user->getWeight()
+        );
+
+        return $tabUser;
     }
 
     public function generateToken()
