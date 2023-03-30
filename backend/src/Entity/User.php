@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Post::class)]
     private Collection $posts;
 
-    #[ORM\Column(length: 10, columnDefinition:"ENUM('male', 'female')")]
+    #[ORM\Column(length: 10)]
     private ?string $sex = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
