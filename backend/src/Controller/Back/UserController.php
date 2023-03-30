@@ -113,6 +113,143 @@ class UserController extends AbstractController
 
     }
 
+    #[Route('/update/', name: 'user_update', methods: ['POST']) ]
+    public function update(UserRepository $userRepository, JobRepository $jobRepository, Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    {
+
+        if ( isset($request->headers->all()['authorization'][0]) ) {
+            $token = str_replace("Bearer ", "", $request->headers->all()['authorization'][0]);
+        } else {
+            $resp = array(
+                "message" => "The authentification token is missing ffrom the headers."
+            );
+
+            return new JsonResponse($resp, 400);
+        }
+
+        $user = $userRepository->findOneByToken($token);
+
+        if ( is_null($user) ) {
+            $resp = array(
+                "message" => "The user doesn't exists."
+            );
+
+            return new JsonResponse($resp, 404);
+        }
+
+        $updated = false;
+
+        $params = json_decode($request->getContent(), true);
+        $params = array_map('trim',$params);
+
+        if (isset($params['email']) && $params['email']!="") {
+            $tmpuser = $userRepository->findOneByEmail($params['email']);
+
+            if (!is_null($tmpuser) && $tmpuser->getId()!=$user->getId()) {
+                $resp = array(
+                    "message"=>"A user with the same email already exists."
+                );
+        
+                return new JsonResponse($resp, 409);
+            }
+
+            $user->setEmail($params['email']);
+            $updated = true;
+
+        }
+
+        if (isset($params['firstname']) && $params['firstname']!="") {
+            $user->setFirstname($params['firstname']);
+            $updated = true;
+        }
+
+        if (isset($params['lastname']) && $params['lastname']!="") {
+            $user->setLastname($params['lastname']);
+            $updated = true;
+        }
+
+        if (isset($params['socialsecuritynumber']) && $params['socialsecuritynumber']!="") {
+            $user->setSocialSecurityNumber($params['socialsecuritynumber']);
+            $updated = true;
+        }
+
+        if (isset($params['pwd']) && $params['pwd']!="") {
+
+            if ( $params['pwd']!=$params['pwdconfirm'] ) {
+                $resp = array(
+                    "message" => "Password and its confirmation doesn't match."
+                );
+    
+                return new JsonResponse($resp, 400);
+            }
+
+            $pwd = $passwordHasher->hashPassword($user, $params['pwd']);
+            $user->setPassword($pwd);
+            $updated = true;
+        }
+
+        if (isset($params['sex']) && $params['sex']!="") {
+            $user->setSex($params['sex']);
+            $updated = true;
+        }
+
+        if (isset($params['birthdate']) && $params['birthdate']!="") {
+            $user->setBirthdate(DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $params['birthdate']));
+            $updated = true;
+        }
+
+        if (isset($params['doctor']) && $params['doctor']!="") {
+            $user->setDoctor($params['doctor']);
+            $updated = true;
+        }
+
+        if (isset($params['job'])) {
+
+            if ( is_numeric($params['job']) ) {
+                $job = $jobRepository->findOneById($params['job']);
+
+                if ( is_null($job) ) {
+                    $resp = array(
+                        "message" => "The job provided doesn't exists."
+                    );
+        
+                    return new JsonResponse($resp, 404);
+                }
+
+            } else {
+                $job = null;
+            }
+
+            $user->setJob($job);
+            $updated = true;
+        }
+
+        if ( isset($params['phonenumber']) ) {
+            $user->setPhonenumber($params['phonenumber']);
+            $updated = true;
+        }
+
+        if ( isset($params['size']) ) {
+            $user->setSize($params['size']);
+            $updated = true;
+        }
+
+        if ( isset($params['weight']) ) {
+            $user->setWeight($params['weight']);
+            $updated = true;
+        }
+
+        if ( $updated ) {
+            $userRepository->save($user, true);
+        }
+
+        $resp = array(
+            "message"=>"User updated with success."
+        );
+
+        return new JsonResponse($resp, 201);
+    }
+
     #[Route('/login/', name: 'user_login', methods: ['POST']) ]
     public function login(UserRepository $userRepository, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
