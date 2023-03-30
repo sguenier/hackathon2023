@@ -113,7 +113,7 @@ class UserController extends AbstractController
 
     }
 
-    #[Route('/update/', name: 'user_update', methods: ['PATCH']) ]
+    #[Route('/update/', name: 'user_update', methods: ['POST']) ]
     public function update(UserRepository $userRepository, JobRepository $jobRepository, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
 
