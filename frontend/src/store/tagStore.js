@@ -31,5 +31,10 @@ export const useTagStore = defineStore('tagStore', {
       this.tags = this.tags.filter((tag) => tag.id !== id);
       return true;
     },
+    async createTag(form) {
+      const { data } = await $API.post('admin/tag/', form);
+      this.getTags();
+      return data;
+    },
   },
 });
