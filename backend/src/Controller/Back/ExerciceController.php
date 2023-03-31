@@ -19,8 +19,34 @@ class ExerciceController extends AbstractController
 {
 
     #[Route('s/', name: 'app_exercice_index', methods: ['GET'])]
-    public function index(ExerciceRepository $exerciceRepository,SerializerInterface $serializer): Response
+    public function index(ExerciceRepository $exerciceRepository,TagRepository $tagRepository, SerializerInterface $serializer): Response
     {
+
+        $filter = $_GET['filter'] ?? null;
+
+        if($filter != null) {
+            $tag = $tagRepository->findOneBy(['id' => $filter]);
+            if($tag == null) {
+                $json = $serializer->serialize($postRepository->findAll(), 'json', [
+                    // dont return the posts of the id, so it doesnt loop
+                    'ignored_attributes' => ['exercices'],
+                    'circular_reference_handler' => function ($object) {
+                        return $object->getId();
+                    }   
+                ]);
+                return new Response($json, 200, ['Content-Type' => 'application/json']);
+            }
+            $exercices = $tag->getExercices();
+            $json = $serializer->serialize($exercices, 'json', [
+                // dont return the posts of the id, so it doesnt loop
+                'ignored_attributes' => ['exercices'],
+                'circular_reference_handler' => function ($object) {
+                    return $object->getId();
+                }   
+            ]);
+            return new Response($json, 200, ['Content-Type' => 'application/json']);
+        }
+
         // return json response
         $json = $serializer->serialize($exerciceRepository->findAll(), 'json', [
             // dont return the posts of the id, so it doesnt loop
@@ -86,9 +112,10 @@ class ExerciceController extends AbstractController
             $exo->setCover($imageName);
         }
 
+        $jsonParam = json_decode($request->getContent(), true);
 
         foreach ($req_params as $param) {
-            if ( is_null($request->get($param)) || $request->get($param) == "" ) {
+            if ( is_null($jsonParam[$param]) || $jsonParam[$param] == "" ) {
                 $missing_param[] = $param;
             }
         }
@@ -103,23 +130,22 @@ class ExerciceController extends AbstractController
         }
 
         $exo = new Exercice();
-        $exo->setName($request->get('name'));
-        $exo->setDuration($request->get('duration'));
-        $exo->setEquipment($request->get('equipment'));
-        $exo->setDescription($request->get('description'));
+        $exo->setName($jsonParam['name']);
+        $exo->setDuration($jsonParam['duration']);
+        $exo->setEquipment($jsonParam['equipment']);
+        $exo->setDescription($jsonParam['description']);
         $exo->setAuthor($user);
 
-        $exo->setEquipment($request->get('equipment'));
 
         $video_id = null;
 
-        if (preg_match('/^(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([\w\-]{11})(?:[\&\?].*)?$/', $request->get('urlyoutube'), $matches)) {
+        if ( !is_null($jsonParam['urlyoutube']) && preg_match('/^(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([\w\-]{11})(?:[\&\?].*)?$/', $jsonParam['urlyoutube'], $matches)) {
             $video_id = $matches[1];
         }
         $exo->setUrlyoutube($video_id);
 
-        if ( !is_null($request->get('tags')) ) {
-            $tmp_tags = json_decode($request->get('tags'));
+        if ( !is_null($jsonParam['tags']) ) {
+            $tmp_tags = json_decode($jsonParam['tags']);
 
             foreach ($tmp_tags as $tag) {
                 $tmp_tag = $tagRepository->find($tag);
