@@ -74,10 +74,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Exercice::class, orphanRemoval: true)]
     private Collection $exercices;
 
+    #[ORM\ManyToMany(targetEntity: Tag::class)]
+    private Collection $tags;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
         $this->exercices = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -350,6 +354,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $exercice->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->tags->removeElement($tag);
 
         return $this;
     }

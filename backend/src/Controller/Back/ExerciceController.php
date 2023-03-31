@@ -223,8 +223,14 @@ class ExerciceController extends AbstractController
             $exo->setUrlyoutube($request->get('urlyoutube'));
         }
 
-        if ( !is_null($request->get('Tag')) ) {
-            $tmp_tags = json_decode($request->get('Tag'), true);
+        if ( !is_null($request->get('tags')) ) {
+            $already_tags = $user->getTags();
+
+            foreach ($already_tags as $tmptag) {
+                $user->removeTag($tmptag);
+            }
+
+            $tmp_tags = json_decode($request->get('tags'), true);
 
             foreach ($tmp_tags as $tag) {
                 $tmp = $tagRepository->find($tag);
