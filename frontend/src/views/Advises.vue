@@ -25,6 +25,8 @@ import {
   ref,
 } from 'vue';
 
+import { useRouter } from 'vue-router';
+
 import Advise from '@/components/Card.vue';
 import JajiTabs from '@/components/JajiTabs.vue';
 import { useAuthStore } from '@/store/authStore';
@@ -37,6 +39,7 @@ export default {
     JajiTabs,
   },
   setup() {
+    const router = useRouter();
     const blogStore = useBlogStore();
     const authStore = useAuthStore();
     const tabs = [ { label: 'Pour Vous', value: 'custom', mustBeLogged: true }, { label: 'Actualité Santé', value: 'actuality' } ];
@@ -55,7 +58,7 @@ export default {
     const advises = computed(() => blogStore.advises);
 
     const cardClick = (id) => {
-      // router.push({ name: 'advise', params: { id } });
+      router.push({ name: 'advice', params: { id } });
     };
 
     return {
