@@ -62,9 +62,11 @@ class PostController extends AbstractController
     public function new(Request $request, PostRepository $postRepository, UserRepository $userRepository, TagRepository $tagRepository): Response
     {
 
-        $data['title'] = $request->request->get('title') ?? null;
-        $data['content'] = $request->request->get('content') ?? null;
-        $data['tags'] = $request->request->get('tags') ?? null;
+        $data = json_decode($request->getContent(), true);
+        // dd($data);
+        // $data['title'] = $request->request->get('title') ?? null;
+        // $data['content'] = $request->request->get('content') ?? null;
+        // $data['tags'] = $request->request->get('tags') ?? null;
 
 
         if($data['title'] == null || $data['content'] == null) {
@@ -111,7 +113,8 @@ class PostController extends AbstractController
             }
 
         }else{
-            return new JsonResponse(['error' => 'Missing image'], 400);
+            $imageName = '';
+            // return new JsonResponse(['error' => 'Missing image'], 400);
         }
 
         $post->setTitle($data['title']);
@@ -121,7 +124,7 @@ class PostController extends AbstractController
         $post->setImage($imageName);
         $post->setCreatedAt(new \DateTimeImmutable());
         
-        $arrayTags = JSON_decode($data['tags'], true);
+        $arrayTags = $data['tags'];
         if($arrayTags == null) {
             $arrayTags = [];
         }
