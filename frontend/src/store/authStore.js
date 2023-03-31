@@ -45,7 +45,7 @@ export const useAuthStore = defineStore('authStore', {
 
     async register(form) {
       if (typeof form.tags !== 'string') {
-        form.tags = form.tags.join(',');
+        form.tags = `[${form.tags.join(',')}]`;
       }
       if (typeof form.disease !== 'string') {
         form.disease = form.disease.join(',');
