@@ -64,19 +64,21 @@ class UserController extends AbstractController
                 $user->setDoctor($params['doctor']);
                 $user->setBirthdate(DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $params['birthdate']));
 
-                $tmp_tags = json_decode($params['tags'], true);
-                foreach ($tmp_tags as $tag) {
-                    $tmp = $tagRepository->find($tag);
+                if ( isset($params['tags']) && $params['tags']!="") {
+                    $tmp_tags = json_decode($params['tags'], true);
+                    foreach ($tmp_tags as $tag) {
+                        $tmp = $tagRepository->find($tag);
 
-                    if ( is_null($tmp) ) {
-                        $resp = array(
-                            "message"=>"One of the provided tag is incorrect."
-                        );
-                
-                        return new JsonResponse($resp, 404);
+                        if ( is_null($tmp) ) {
+                            $resp = array(
+                                "message"=>"One of the provided tag is incorrect."
+                            );
+                    
+                            return new JsonResponse($resp, 404);
+                        }
+
+                        $user->addTag($tmp);
                     }
-
-                    $user->addTag($tmp);
                 }
 
                 //param nullable
