@@ -69,20 +69,31 @@
           placeholder="Numéro de téléphone"
         />
       </el-form-item>
-    
-      <el-form-item>
-        <el-button
+      <el-form-item
+        label="Numéro de sécurité social"
+        prop="socialsecuritynumber"
+      >
+        <el-input
           size="large"
-          @click="$emit('previous')"
-        >Previous</el-button>
+          v-model="form.socialsecuritynumber"
+          placeholder="Numéro de sécurité social"
+        />
       </el-form-item>
-      <el-form-item>
-        <el-button
-          type="primary"
-          size="large"
-          @click="next"
-        >Suivant</el-button>
-      </el-form-item>
+      <div class="register-personal__group">
+        <el-form-item>
+          <el-button
+            size="large"
+            @click="$emit('previous')"
+          >Previous</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            size="large"
+            @click="next"
+          >Suivant</el-button>
+        </el-form-item>
+      </div>
     </el-form>
   </div>
 </template>
@@ -178,6 +189,18 @@ export default {
           trigger: 'blur',
         },
       ],
+      socialsecuritynumber: [
+        {
+          required: true,
+          message: 'Veillez renseigner votre numéro de sécurité social',
+          trigger: 'blur',
+        },
+        {
+          patern: /^[0-9]{13}$/,
+          message: 'Le numéro de sécurité social doit faire 13 chiffres',
+          trigger: 'blur',
+        },
+      ],
     });
 
     return {
@@ -191,7 +214,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.register-form {
+.register-personal {
   padding: 0 48px;
+
+  &__group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+  }
 }
 </style>

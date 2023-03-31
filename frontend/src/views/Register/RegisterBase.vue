@@ -2,7 +2,6 @@
   <div class="register-base">
     <el-form
       ref="registerBaseFrom"
-      class="register-form"
       :label-position="'top'"
       :rules="rules"
       :model="form"
@@ -42,13 +41,15 @@
           placeholder="Confirmation du mot de passe"
         />
       </el-form-item>
-      <el-form-item>
-        <el-button
-          type="primary"
-          size="large"
-          @click="next"
-        >Suivant</el-button>
-      </el-form-item>
+      <div class="register-base__group">
+        <el-form-item>
+          <el-button
+            type="primary"
+            size="large"
+            @click="next"
+          >Suivant</el-button>
+        </el-form-item>
+      </div>
     </el-form>
   </div>
 </template>
@@ -146,7 +147,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.register-form {
+.register-base {
   padding: 0 48px;
+
+  &__group {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 </style>
