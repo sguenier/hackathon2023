@@ -71,9 +71,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?int $weight = null;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Exercice::class, orphanRemoval: true)]
+    private Collection $exercices;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->exercices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -316,6 +320,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setWeight(?int $weight): self
     {
         $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Exercice>
+     */
+    public function getExercices(): Collection
+    {
+        return $this->exercices;
+    }
+
+    public function addExercice(Exercice $exercice): self
+    {
+        if (!$this->exercices->contains($exercice)) {
+            $this->exercices->add($exercice);
+            $exercice->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExercice(Exercice $exercice): self
+    {
+        if ($this->exercices->removeElement($exercice)) {
+            // set the owning side to null (unless already changed)
+            if ($exercice->getAuthor() === $this) {
+                $exercice->setAuthor(null);
+            }
+        }
 
         return $this;
     }
