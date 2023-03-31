@@ -395,7 +395,6 @@ class UserController extends AbstractController
 
     public function userToArray($user)
     {
-        $job = (!is_null($user->getJob()))?["id"=>$user->getJob()->getId(),"name"=>$user->getJob()->getName()]:null;
         $tags = array();
 
         foreach ($user->getTags() as $tag) {
@@ -412,7 +411,6 @@ class UserController extends AbstractController
             "role"=>$user->getRoles(),
             "lastname"=>$user->getLastname(),
             "firstname"=>$user->getFirstname(),
-            "job"=>$job,
             "socialSecurityNumber"=>$user->getSocialSecurityNumber(),
             "sex"=>$user->getSex(),
             "phonenumber"=>$user->getPhonenumber(),
