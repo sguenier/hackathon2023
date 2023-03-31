@@ -7,29 +7,38 @@ use App\Entity\User;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
+use App\Repository\TagRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/post')]
 class PostController extends AbstractController
 {
-    //rajouter verif CSRF sur les routes
     #[Route('s/', name: 'app_post_index', methods: ['GET'])]
-    public function index(PostRepository $postRepository): Response
+    public function index(PostRepository $postRepository, TagRepository $tagRepository, SerializerInterface $serializer): Response
     {
-        // return json response
-        return $this->json($postRepository->findAll());
+        $json = $serializer->serialize($postRepository->findAll(), 'json', [
+            // dont return the posts of the id, so it doesnt loop
+            'ignored_attributes' => ['posts'],
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }   
+        ]);
+        return new Response($json, 200, ['Content-Type' => 'application/json']);
     }
 
     #[Route('/new/', name: 'app_post_new', methods: ['POST'])]
-    public function new(Request $request, PostRepository $postRepository, UserRepository $userRepository): Response
+    public function new(Request $request, PostRepository $postRepository, UserRepository $userRepository, TagRepository $tagRepository): Response
     {
 
         $data['title'] = $request->request->get('title') ?? null;
         $data['content'] = $request->request->get('content') ?? null;
+        $data['tags'] = $request->request->get('tags') ?? null;
+
 
         if($data['title'] == null || $data['content'] == null) {
             return new JsonResponse(['error' => 'Missing required fields'], 400);
@@ -84,12 +93,22 @@ class PostController extends AbstractController
         // set image to empty
         $post->setImage($imageName);
         $post->setCreatedAt(new \DateTimeImmutable());
+        
+        $arrayTags = JSON_decode($data['tags'], true);
+        foreach ($arrayTags as $tag) {
+            $tag = $tagRepository->find($tag);
+            if($tag == null) {
+                return new JsonResponse(['error' => 'Tag not found'], 400);
+            }else{
+                $post->addTag($tag);
+            }
+        }
 
         // create the post
         $postRepository->save($post, true);
         if($post->getId() == null) {
             return new JsonResponse(['error' => 'Post not created'], 400);
-        }else{  
+        }else{              
             return new JsonResponse(['message' => 'Post created'], 201);
         }
         
@@ -98,12 +117,19 @@ class PostController extends AbstractController
     #[Route('/{id}/', name: 'app_post_show', methods: ['GET'])]
     public function show(Post $post): Response
     {
-        $jsonedPost = [
+        foreach ($post->getTag() as $tag) {
+            $jsonedTag[] = [
+                'id' => $tag->getId(),
+                'name' => $tag->getName()
+            ];
+        }
+            $jsonedPost = [
             'id' => $post->getId(),
             'title' => $post->getTitle(),
             'content' => $post->getContent(),
             'image' => $post->getImage(),
-            'created_at' => $post->getCreatedAt()
+            'created_at' => $post->getCreatedAt(),
+            'Tag' => $jsonedTag
         ]; 
         // 'author' => $post->getAuthor()->getUsername(),
 
@@ -170,12 +196,20 @@ class PostController extends AbstractController
             // $post->setUpdatedAt(new \DateTimeImmutable());
             $postRepository->save($post, true);
             // return the updated post
+            $jsonedTag = [];
+            foreach ($post->getTag() as $tag) {
+                $jsonedTag[] = [
+                    'id' => $tag->getId(),
+                    'name' => $tag->getName()
+                ];
+            }
             $jsonedPost = [
                 'id' => $post->getId(),
                 'title' => $post->getTitle(),
                 'content' => $post->getContent(),
                 'image' => $post->getImage(),
-                'created_at' => $post->getCreatedAt()
+                'created_at' => $post->getCreatedAt(),
+                'Tag' => $jsonedTag
             ];
             return new JsonResponse($jsonedPost);
     }
