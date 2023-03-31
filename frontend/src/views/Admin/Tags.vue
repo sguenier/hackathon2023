@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="admin-tags">
     <el-table

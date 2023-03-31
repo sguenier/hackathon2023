@@ -30,5 +30,17 @@ export const useBlogStore = defineStore('blogStore', {
       
       return data;
     },
+
+    async deletePost(id) {
+      await $API.delete(`admin/post/${id}/`);
+      this.advises = this.advises.filter((post) => post.id !== id);
+      return true;
+    },
+
+    async createPost(form) {
+      const { data } = await $API.post('admin/post/new/', form);
+      this.getAdvises();
+      return data;
+    },
   },
 });
