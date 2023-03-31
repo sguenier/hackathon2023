@@ -67,23 +67,23 @@ const router = createRouter({
         },
       ],
     },
-    {
-      path: '/profile',
-      name: 'profile',
-      component: () => import('@/views/Profile.vue'),
-      children: [
-        {
-          path: 'edit',
-          name: 'profileEdit',
-          component: () => import('@/views/ProfileEdit.vue'),
-        },
-      ],
-    },
-    {
-      path: '/form',
-      name: 'formExample',
-      component: () => import('@/views/FormExample.vue'),
-    },
+    // {
+    //   path: '/profile',
+    //   name: 'profile',
+    //   component: () => import('@/views/Profile.vue'),
+    //   children: [
+    //     {
+    //       path: 'edit',
+    //       name: 'profileEdit',
+    //       component: () => import('@/views/ProfileEdit.vue'),
+    //     },
+    //   ],
+    // },
+    // {
+    //   path: '/form',
+    //   name: 'formExample',
+    //   component: () => import('@/views/FormExample.vue'),
+    // },
     {
       path: '/advises',
       name: 'advises',
