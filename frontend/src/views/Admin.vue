@@ -39,7 +39,6 @@ export default {
     ];
 
     onMounted(() => {
-      console.log('mounted');
       const currentRouteName = route.name;
       selectedTabValue.value = currentRouteName.split('-')[1];
     });
