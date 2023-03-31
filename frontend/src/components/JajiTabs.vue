@@ -15,7 +15,7 @@
 <script>
 export default {
   name: 'JajiTabs',
-  emits: [ 'update:modelValue' ],
+  emits: [ 'update:modelValue', 'change' ],
   props: {
     /**
      * The tabs to display.
@@ -37,6 +37,7 @@ export default {
   setup(props, { emit }) {
     const tabChange = (value) => {
       emit('update:modelValue', value);
+      emit('change', value);
     };
 
     return {

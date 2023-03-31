@@ -72,6 +72,19 @@
         />
         <span>Logout</span>
       </button>
+      <router-link
+        v-if="isLogged"
+        class="navbar__list__link"
+        :to="{ name: 'admin' }"
+      >
+        <vue-feather
+          size="16"
+          type="box"
+        />
+        <span>  
+          Backoffice
+        </span>
+      </router-link>
     </div>
   </nav>
 </template>
