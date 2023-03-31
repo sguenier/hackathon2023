@@ -43,8 +43,6 @@ export default {
     const authStore = useAuthStore();
     const form = ref({});
 
-    const registerFrom = ref(null);
-
     const actualRouteName = computed(() => router.currentRoute.value.name);
 
     const registerRouteNames = [
@@ -66,46 +64,13 @@ export default {
       router.push({ name: registerRouteNames[currentRouteIndex - 1] });
     };
 
-    const rules = ref({
-      firstname: [
-        {
-          required: true,
-          message: 'Veuillez renseigner un prénom',
-          trigger: 'blur', 
-        },
-      ],
-      lastname: [
-        {
-          required: true,
-          message: 'Veuillez renseigner un nom',
-          trigger: 'blur', 
-        },
-      ],
-      socialsecuritynumber: [
-        {
-          required: true,
-          message: 'Veuillez renseigner un numéro de sécurité sociale',
-          trigger: 'blur', 
-        },
-        {
-          required: true,
-          pattern: /^[12][0-9]{2}(0[1-9]|1[0-2])(2[AB]|[0-9]{2})[0-9]{3}[0-9]{3}([0-9]{2})$/,
-          message: 'Veuillez renseigner un numéro de sécurité sociale valide',
-          trigger: 'blur', 
-        },
-      ],
-      job: [ { required: true, message: 'Veuillez renseigner un poste', trigger: 'change' } ],
-    });
-
     const submit = async () => {
       await authStore.register(form.value);
       router.push({ name: 'login' });
     };
 
     return {
-      rules,
       form,
-      registerFrom,
       submit,
       nextStep,
       previousStep,

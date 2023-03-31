@@ -124,16 +124,6 @@ export default {
       });
     };
 
-    const confirmPasswordValidator = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Veuillez confirmer le mot de passe'));
-      } else if (value !== form.value.pwd) {
-        callback(new Error('Les mots de passe ne correspondent pas!'));
-      } else {
-        callback();
-      }
-    };
-
     const rules = ref({
       lastname: [
         {
