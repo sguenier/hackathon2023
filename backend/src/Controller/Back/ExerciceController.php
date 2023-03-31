@@ -42,6 +42,39 @@ class ExerciceController extends AbstractController
             }
         }
 
+        $exo = new Exercice();
+
+        $image = $request->files->get('cover');
+        if ( !is_null($image) ) {
+            $imageSize = $image->getSize();
+            $imageType = $image->getMimeType();
+            if($imageSize > 8000000) {
+                return new JsonResponse(['error' => 'Image too big'], 400);
+            }
+            if($imageType != 'image/jpeg' && $imageType != 'image/png') {
+                return new JsonResponse(['error' => 'Invalid image type'], 400);
+            }
+
+            $imageName = md5(uniqid()) . '.' . $image->guessExtension();
+
+            $image->move(
+                $this->getParameter('exercices_directory'),
+                $imageName
+            );
+
+            if(!file_exists($this->getParameter('exercices_directory') . '/' . $imageName)) {
+                return new JsonResponse(['error' => 'Image not saved'], 400);
+            }else{
+                  // remove the old image
+                if(!is_null($exo->getCover()) && file_exists($this->getParameter('exercices_directory') . '/' . $exo->getCover())) {
+                    unlink($this->getParameter('exercices_directory') . '/' . $exo->getCover());
+                }
+            }
+
+            $exo->setCover($imageName);
+        }
+
+
         foreach ($req_params as $param) {
             if ( is_null($request->get($param)) || $request->get($param) == "" ) {
                 $missing_param[] = $param;
