@@ -99,7 +99,7 @@ class AppFixtures extends Fixture
         $user1->setDoctor('Mahbul');
         $user1->setSize(173);
         $user1->setWeight(66);
-        $user1->setPassword("1234567");
+        $user1->setPassword('$2y$13$rIDu6Ov6G2uGrQkeays/Re47ZMK5G/G3Am4eC5nb7u912MrkpbzKa');
         $manager->persist($user1);
 
         $user2 = new User();
@@ -115,13 +115,13 @@ class AppFixtures extends Fixture
         $user2->setDoctor('Strange');
         $user2->setSize(180);
         $user2->setWeight(77);
-        $user2->setPassword("1234567");
+        $user2->setPassword('$2y$13$rIDu6Ov6G2uGrQkeays/Re47ZMK5G/G3Am4eC5nb7u912MrkpbzKa');
         $manager->persist($user2);
 
         $user = new User();
         $user->setEmail('mail3@mail.com');
-        $user->setLastname('Ben');
-        $user->setFirstname('Laden');
+        $user->setLastname('John');
+        $user->setFirstname('Doe');
         $user->setJob($job4);
         $user->setSocialSecurityNumber("1971786764343456789");
         $user->setSex('male');
@@ -130,7 +130,8 @@ class AppFixtures extends Fixture
         $user->setDoctor('Who');
         $user->setSize(168);
         $user->setWeight(59);
-        $user->setPassword("1234567");
+        $user->setPassword('$2y$13$rIDu6Ov6G2uGrQkeays/Re47ZMK5G/G3Am4eC5nb7u912MrkpbzKa');
+        $manager->persist($user);
 
         $user = new User();
         $user->setEmail('mail4@mail.com');
@@ -144,7 +145,7 @@ class AppFixtures extends Fixture
         $user->setDoctor('Gynéco');
         $user->setSize(198);
         $user->setWeight(113);
-        $user->setPassword("1234567");
+        $user->setPassword('$2y$13$rIDu6Ov6G2uGrQkeays/Re47ZMK5G/G3Am4eC5nb7u912MrkpbzKa');
         $manager->persist($user);
 
         //BLOC POUR POST
