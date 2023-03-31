@@ -85,10 +85,10 @@ class Post
     // Risque de renvoyer l'erreur "undefined array key job_id" 
     // TODO A FIX
 
-    public function getAuthor(): ?User
-    {
-        return $this->author;
-    }
+    // public function getAuthor(): ?User
+    // {
+    //     return $this->author;
+    // }
 
     public function setAuthor(?User $author): self
     {
