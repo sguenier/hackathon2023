@@ -102,6 +102,48 @@ class ExerciceController extends AbstractController
 
     }
 
+    #[Route('/{id}', name: 'app_exercice_show', methods: ['GET'])]
+    public function show(Exercice $exercice): Response
+    {
+
+        $tabExo = $this->exerciceToArray($exercice);
+        $resp = array(
+            "message"=>"Exercice found with success.",
+            "exercice"=>$tabExo
+        );
+
+        return new JsonResponse($resp, 200);
+
+    }
+
+    public function exerciceToArray(Exercice $exercice)
+    {
+
+        $tags = array();
+
+        foreach ($exercice->getTags() as $tag) {
+            $tmp = array(
+                "id"=>$tag->getId(),
+                "name"=>$tag->getName()
+            );
+            $tags[] = $tmp;
+        }
+
+        $exoTab = array(
+            "name"=>$exercice->getName(),
+            "duration"=>$exercice->getDuration(),
+            "equipment"=>$exercice->getEquipment(),
+            "description"=>$exercice->getDescription(),
+            "urlyoutube"=>$exercice->getUrlyoutube(),
+            "cover"=>$exercice->getCover(),
+            "Tag"=>$tags,
+            "author"=>$exercice->getAuthor()->getId()
+        );
+
+        return $exoTab;
+
+    }
+
 
 
 }
