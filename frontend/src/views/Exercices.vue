@@ -10,7 +10,7 @@
       <el-option
         v-for="item in tags"
         :key="item.id"
-        :label="item.title"
+        :label="item.name"
         :value="item.id"
       />
     </el-select>
@@ -24,6 +24,7 @@
         :id="exercice.id"
         @click="cardClick"
       />
+      <p v-if="exercices.length ===0"> Aucun exercice</p>
     </div>
 
   </div>
@@ -53,7 +54,13 @@ export default {
     const tagsStore = useTagStore();
     const filter = ref(0);
 
-    const tags = computed(() => tagsStore.tags);
+    let tags = computed(() => tagsStore.tags);
+    // get tags and add one tag value : 0 and name : tous
+    tags = computed(() => {
+      const tags = tagsStore.tags;
+      tags.unshift({ id: 0, name: 'Tous' });
+      return tags;
+    });
     const exercices = computed(() => exercicesStore.exercices);
 
     onMounted(() => {

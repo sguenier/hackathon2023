@@ -17,7 +17,15 @@ export const useExerciceStore = defineStore('exerciceStore', {
     async getExercices(categorie) {
       let { data } = await $API.get('admin/exercices/');
       if (categorie != '0') {
-        data = data.filter((exercice) => exercice.categorie == categorie);
+        data = data.filter((exercice) => {
+          let found = false;
+          exercice.tags.forEach((tag) => {
+            if (tag.id == categorie) {
+              found = true;
+            }
+          });
+          return found;
+        });
       }
       await new Promise((resolve) => setTimeout(resolve, 300));
       this.exercices = data;
@@ -31,45 +39,6 @@ export const useExerciceStore = defineStore('exerciceStore', {
       await new Promise((resolve) => setTimeout(resolve, 300));
       this.exercice = data.exercice;
       this.isExerciceLoading = false;
-      return data;
-    },
-
-
-    async getCategories() {
-      this.isCategoriesLoading = true;
-      const { data } = await $API.get('admin/tags/');
-      console.log(data);
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      this.categories = data;
-      this.isCategoriesLoading = false;
-      return data;
-    },
-    
-    async getCategorie(id) {
-      this.isCategorieLoading = true;
-      // const { data } = await $API.get('categories/' + id);
-      let data = [
-        {
-          id: 1,
-          title: 'Musculation',
-        },
-        {
-          id: 2,
-          title: 'Etirement',
-        },
-        {
-          id: 3,
-          title: 'Echauffement',
-        },
-        {
-          id: 4,
-          title: 'Cardio',
-        },
-      ];
-      data = data.filter((categorie) => categorie.id == id);
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      this.categorie = data[0];
-      this.isCategorieLoading = false;
       return data;
     },
   },

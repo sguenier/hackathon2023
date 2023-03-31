@@ -12,13 +12,13 @@
     />
     <div class="exercice__content">
       <div class="exercice__tags">
-        <span
+        <!-- <span
           v-for="tag in exercice.Tag"
           :key="tag.id"
         >
           {{ tag.name }}
           <span v-if="exercice.Tag.indexOf(tag) !== exercice.Tag.length - 1"> - </span>
-        </span>
+        </span> -->
       </div>
       <div class="exercice__infos">
         <div class="exercice__card">
@@ -73,7 +73,6 @@ export default {
 
     onMounted( async() => {
       await exerciceStore.getExercice(router.currentRoute.value.params.id);
-      exerciceStore.getCategorie(exercice.value.categorie);
     });
 
     return {
