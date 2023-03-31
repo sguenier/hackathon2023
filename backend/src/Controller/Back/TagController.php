@@ -53,6 +53,10 @@ class TagController extends AbstractController
             }
         }
 
+        if ( !in_array("ROLE_ADMIN", $user->getRoles()) ) {
+            return new JsonResponse(['message' => 'Permission denied.'], 403);
+        }
+
         $tag->setName($data['name']);
 
         // check if there is a tag with the same name

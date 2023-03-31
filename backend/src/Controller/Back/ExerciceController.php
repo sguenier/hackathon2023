@@ -42,6 +42,10 @@ class ExerciceController extends AbstractController
             }
         }
 
+        if ( !in_array("ROLE_ADMIN", $user->getRoles()) ) {
+            return new JsonResponse(['message' => 'You don\'t have permission to create exercice.'], 403);
+        }
+
         $exo = new Exercice();
 
         $image = $request->files->get('cover');
@@ -135,7 +139,7 @@ class ExerciceController extends AbstractController
 
     }
 
-    #[Route('/{id}', name: 'app_exercice_show', methods: ['GET'])]
+    #[Route('/{id}/', name: 'app_exercice_show', methods: ['GET'])]
     public function show(Exercice $exercice): Response
     {
 
@@ -148,6 +152,104 @@ class ExerciceController extends AbstractController
         return new JsonResponse($resp, 200);
 
     }
+
+    #[Route('/{id}/', name: 'app_exercice_update', methods: ['POST'])]
+    public function update(Request $request, Exercice $exo, UserRepository $userRepository, TagRepository $tagRepository): Response
+    {
+
+        if (!$request->headers->has('Authorization')) {
+            return new JsonResponse(['message' => 'Missing authorization header'], 400);
+        }else{
+            $token = $request->headers->get('Authorization');
+            $token = str_replace('Bearer ', '', $token);
+            $user = $userRepository->findOneBy(['session_token' => $token]);
+            if($user == null) {
+                return new JsonResponse(['mesage' => 'Invalid token'], 400);
+            }
+        }
+
+        if ( $user->getId() != $exo->getAuthor()->getId() ) {
+            return new JsonResponse(['message' => 'You dont\'t have permission to edit this exercice'], 403);
+        }
+
+        $image = $request->files->get('cover');
+        if ( !is_null($image) ) {
+            $imageSize = $image->getSize();
+            $imageType = $image->getMimeType();
+            if($imageSize > 8000000) {
+                return new JsonResponse(['error' => 'Image too big'], 400);
+            }
+            if($imageType != 'image/jpeg' && $imageType != 'image/png') {
+                return new JsonResponse(['error' => 'Invalid image type'], 400);
+            }
+
+            $imageName = md5(uniqid()) . '.' . $image->guessExtension();
+
+            $image->move(
+                $this->getParameter('exercices_directory'),
+                $imageName
+            );
+
+            if(!file_exists($this->getParameter('exercices_directory') . '/' . $imageName)) {
+                return new JsonResponse(['error' => 'Image not saved'], 400);
+            }else{
+                  // remove the old image
+                if(!is_null($exo->getCover()) && file_exists($this->getParameter('exercices_directory') . '/' . $exo->getCover())) {
+                    unlink($this->getParameter('exercices_directory') . '/' . $exo->getCover());
+                }
+            }
+
+            $exo->setCover($imageName);
+        }
+
+
+        if ( !is_null($request->get('name')) ) {
+            $exo->setName($request->get('name'));
+        }
+
+        if ( !is_null($request->get('duration')) ) {
+            $exo->setDuration($request->get('duration'));
+        }
+
+        if ( !is_null($request->get('equipment')) ) {
+            $exo->setEquipment($request->get('equipment'));
+        }
+
+        if ( !is_null($request->get('description')) ) {
+            $exo->setDescription($request->get('description'));
+        }
+
+        if ( !is_null($request->get('urlyoutube')) ) {
+            $exo->setUrlyoutube($request->get('urlyoutube'));
+        }
+
+        if ( !is_null($request->get('Tag')) ) {
+            $tmp_tags = json_decode($request->get('Tag'), true);
+
+            foreach ($tmp_tags as $tag) {
+                $tmp = $tagRepository->find($tag);
+
+                if ( is_null($tag) ) {
+                    return new JsonResponse(['message' => 'One of the provided tag is incorrect'], 404);
+                }
+
+                $exo->addTag($tmp);
+            }
+        }
+
+        $exerciceRepository->save($exo, true);
+        $exoTab = $this->exerciceToArray($exoTab);
+        $resp = array(
+            "message"=>"The exercice has been created with success.",
+            "exercice"=>$exoTab
+        );
+
+        return new JsonResponse($resp, 200);
+
+
+    }
+
+
 
     public function exerciceToArray(Exercice $exercice)
     {
