@@ -12,3 +12,7 @@
 0. Install the latest `lts node`
 1. Run `npm install`
 2. Run `npm run dev`
+
+Utilisateur à tester avec est l'utilisateur avec l'id 2:
+- mail : mail2@mail.com
+- mdp 1234566
