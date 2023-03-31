@@ -21,6 +21,33 @@ class PostController extends AbstractController
     #[Route('s/', name: 'app_post_index', methods: ['GET'])]
     public function index(PostRepository $postRepository, TagRepository $tagRepository, SerializerInterface $serializer): Response
     {
+
+        // filter parameter in url = ?filter=tag1 (tag1 is id of tag)
+        $filter = $_GET['filter'] ?? null;
+        // get all posts with the tag 
+        // get post of tag with id = $filter
+        if($filter != null) {
+            $tag = $tagRepository->findOneBy(['id' => $filter]);
+            if($tag == null) {
+                $json = $serializer->serialize($postRepository->findAll(), 'json', [
+                    // dont return the posts of the id, so it doesnt loop
+                    'ignored_attributes' => ['posts'],
+                    'circular_reference_handler' => function ($object) {
+                        return $object->getId();
+                    }   
+                ]);
+                return new Response($json, 200, ['Content-Type' => 'application/json']);
+            }
+            $posts = $tag->getPosts();
+            $json = $serializer->serialize($posts, 'json', [
+                // dont return the posts of the id, so it doesnt loop
+                'ignored_attributes' => ['posts'],
+                'circular_reference_handler' => function ($object) {
+                    return $object->getId();
+                }   
+            ]);
+            return new Response($json, 200, ['Content-Type' => 'application/json']);
+        }
         $json = $serializer->serialize($postRepository->findAll(), 'json', [
             // dont return the posts of the id, so it doesnt loop
             'ignored_attributes' => ['posts'],
@@ -133,7 +160,6 @@ class PostController extends AbstractController
             'content' => $post->getContent(),
             'image' => $post->getImage(),
             'created_at' => $post->getCreatedAt(),
-            'author' => $post->getAuthor()->getId(),
             'Tag' => $jsonedTag
         ]; 
 
@@ -214,6 +240,7 @@ class PostController extends AbstractController
                     $post->addTag($tag);
                 }
             }
+
             
 
             // $post->setUpdatedAt(new \DateTimeImmutable());
