@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+
 import $API from '@/plugins/axios';
 
 export const useExerciceStore = defineStore('exerciceStore', {
@@ -11,6 +12,7 @@ export const useExerciceStore = defineStore('exerciceStore', {
     isCategoriesLoading: false,
     categorie: {},
     isCategorieLoading: false,
+    isExerciceCreating: false,
   }),
 
   actions: {
@@ -39,6 +41,16 @@ export const useExerciceStore = defineStore('exerciceStore', {
       await new Promise((resolve) => setTimeout(resolve, 300));
       this.exercice = data.exercice;
       this.isExerciceLoading = false;
+      return data;
+    },
+
+    async createExercice(from) {
+      this.isExerciceCreating = true;
+      // tags to string
+      from.tags = `[${from.tags.map((tag) => tag).join(',')}]`;
+      const { data } = await $API.post('admin/exercice/create/', from);
+      this.isExerciceCreating = false;
+      await this.getExercices('0');
       return data;
     },
   },
