@@ -31,7 +31,7 @@
             size="24"
             class="exercice__categorie-icon"
           />
-          <span>{{ exercice.categorie }}</span>
+          <span>{{ categorie.title }}</span>
           <vue-feather
             type="chevron-right"
             size="24"
@@ -40,6 +40,9 @@
         </div>
       </div>
       <p>{{ exercice.content }}</p>
+    </div>
+    <div class="exercice__start">
+      <button class="exercice__start__button">DÉMARRER L’ENTRAINEMENT</button>
     </div>
   </div>
 </template>
@@ -57,14 +60,17 @@ export default {
 
     const exercice = computed(() => exerciceStore.exercice);
     const duration = computed(() => Math.floor(exercice.value.duration / 60));
+    const categorie = computed(() => exerciceStore.categorie);
 
-    onMounted(() => {
-      exerciceStore.getExercice(router.currentRoute.value.params.id);
+    onMounted( async() => {
+      await exerciceStore.getExercice(router.currentRoute.value.params.id);
+      exerciceStore.getCategorie(exercice.value.categorie);
     });
 
     return {
       exercice,
       duration,
+      categorie,
     };
   },
 };
@@ -73,10 +79,12 @@ export default {
 <style lang="scss" scoped>
 .exercice {
   &__video {
-    width: 100%;
-    height: 210px;
+    width: 650px;
+    height: 410px;
     border-radius: 8px;
   }
+
+
 
   &__content {
     border: 1px solid var(--color-background-disable);
@@ -89,6 +97,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
   &__card {
     display: flex;
@@ -102,6 +111,29 @@ export default {
     padding: 12px 9px;
     span {
       margin: 0 1rem;
+    }
+  }
+  &__start {
+    background-color: var(--text-white);
+    padding: 12px 0;
+    display: flex;
+    justify-content: center;
+    &__button {
+      background-color: var(--color-turquoise-light);
+      text-transform: uppercase;
+      font-size: 13px;
+      padding: 12px 35px;
+      border: none;
+    }
+    &__button:hover {
+      cursor: pointer;
+      background-color: var(--color-turquoise-lighter);
+    }
+  }
+  @media (max-width: 768px) {
+    &__video {
+      width: 100%;
+      height: 200px;
     }
   }
 }
