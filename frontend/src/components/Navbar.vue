@@ -188,6 +188,7 @@ export default {
   }
 
   @media (max-width: 768px) {
+    z-index: 1;
     flex-direction: row;
     position: fixed;
     bottom: 0;
