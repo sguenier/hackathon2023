@@ -32,7 +32,7 @@ class Post
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
-    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'posts')]
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'posts', fetch: 'EXTRA_LAZY')]
     private Collection $Tag;
 
     public function __construct()
