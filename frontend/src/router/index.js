@@ -99,6 +99,29 @@ const router = createRouter({
       name: 'exercice',
       component: () => import('@/views/Exercice.vue'),
     },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('@/views/Admin.vue'),
+      redirect: () => ({ name: 'admin-tags' }),
+      children: [
+        {
+          path: 'tags',
+          name: 'admin-tags',
+          component: () => import('@/views/Admin/Tags.vue'),
+        },
+        {
+          path: 'exercices',
+          name: 'admin-exercices',
+          component: () => import('@/views/Admin/Exercices.vue'),
+        },
+        {
+          path: 'post',
+          name: 'admin-posts',
+          component: () => import('@/views/Admin/Posts.vue'),
+        },
+      ],
+    },
     // {
     //   path: '/:pathMatch(.*)*',
     //   name: 'not-found',

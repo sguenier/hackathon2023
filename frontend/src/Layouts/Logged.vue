@@ -6,7 +6,6 @@
       name="fade"
       tag="main"
       class="logged__main"
-      :key="$route.path"
     >
       <slot />
     </transition-group>
