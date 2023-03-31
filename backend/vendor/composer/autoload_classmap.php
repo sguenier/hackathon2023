@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'App\\Controller\\Back\\DefaultController' => $baseDir . '/src/Controller/Back/DefaultController.php',
+    'App\\Controller\\Back\\ExerciceController' => $baseDir . '/src/Controller/Back/ExerciceController.php',
     'App\\Controller\\Back\\JobController' => $baseDir . '/src/Controller/Back/JobController.php',
     'App\\Controller\\Back\\PostController' => $baseDir . '/src/Controller/Back/PostController.php',
     'App\\Controller\\Back\\TagController' => $baseDir . '/src/Controller/Back/TagController.php',
@@ -14,6 +15,7 @@ return array(
     'App\\Controller\\Front\\DefaultController' => $baseDir . '/src/Controller/Front/DefaultController.php',
     'App\\Controller\\SecurityController' => $baseDir . '/src/Controller/SecurityController.php',
     'App\\DataFixtures\\AppFixtures' => $baseDir . '/src/DataFixtures/AppFixtures.php',
+    'App\\Entity\\Exercice' => $baseDir . '/src/Entity/Exercice.php',
     'App\\Entity\\Job' => $baseDir . '/src/Entity/Job.php',
     'App\\Entity\\Post' => $baseDir . '/src/Entity/Post.php',
     'App\\Entity\\Tag' => $baseDir . '/src/Entity/Tag.php',
@@ -21,6 +23,7 @@ return array(
     'App\\Form\\PostType' => $baseDir . '/src/Form/PostType.php',
     'App\\Form\\TagType' => $baseDir . '/src/Form/TagType.php',
     'App\\Kernel' => $baseDir . '/src/Kernel.php',
+    'App\\Repository\\ExerciceRepository' => $baseDir . '/src/Repository/ExerciceRepository.php',
     'App\\Repository\\JobRepository' => $baseDir . '/src/Repository/JobRepository.php',
     'App\\Repository\\PostRepository' => $baseDir . '/src/Repository/PostRepository.php',
     'App\\Repository\\TagRepository' => $baseDir . '/src/Repository/TagRepository.php',

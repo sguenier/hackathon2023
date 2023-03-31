@@ -21,9 +21,13 @@ class Tag
     #[ORM\ManyToMany(targetEntity: Post::class, mappedBy: 'Tag')]
     private Collection $posts;
 
+    #[ORM\ManyToMany(targetEntity: Exercice::class, mappedBy: 'tags')]
+    private Collection $exercices;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->exercices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -57,6 +61,23 @@ class Tag
             $this->posts->add($post);
             $post->addTag($this);
         }
+        return $this;
+    }
+    
+    /**
+     * @return Collection<int, Exercice>
+     */
+    public function getExercices(): Collection
+    {
+        return $this->exercices;
+    }
+
+    public function addExercice(Exercice $exercice): self
+    {
+        if (!$this->exercices->contains($exercice)) {
+            $this->exercices->add($exercice);
+            $exercice->addTag($this);
+        }
 
         return $this;
     }
@@ -65,6 +86,15 @@ class Tag
     {
         if ($this->posts->removeElement($post)) {
             $post->removeTag($this);
+        }
+
+        return $this;
+    }
+    
+    public function removeExercice(Exercice $exercice): self
+    {
+        if ($this->exercices->removeElement($exercice)) {
+            $exercice->removeTag($this);
         }
 
         return $this;

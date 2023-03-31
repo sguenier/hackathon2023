@@ -583,6 +583,7 @@ class ComposerStaticInite3051687080b2ac78e10fa357a6f3d60
 
     public static $classMap = array (
         'App\\Controller\\Back\\DefaultController' => __DIR__ . '/../..' . '/src/Controller/Back/DefaultController.php',
+        'App\\Controller\\Back\\ExerciceController' => __DIR__ . '/../..' . '/src/Controller/Back/ExerciceController.php',
         'App\\Controller\\Back\\JobController' => __DIR__ . '/../..' . '/src/Controller/Back/JobController.php',
         'App\\Controller\\Back\\PostController' => __DIR__ . '/../..' . '/src/Controller/Back/PostController.php',
         'App\\Controller\\Back\\TagController' => __DIR__ . '/../..' . '/src/Controller/Back/TagController.php',
@@ -590,6 +591,7 @@ class ComposerStaticInite3051687080b2ac78e10fa357a6f3d60
         'App\\Controller\\Front\\DefaultController' => __DIR__ . '/../..' . '/src/Controller/Front/DefaultController.php',
         'App\\Controller\\SecurityController' => __DIR__ . '/../..' . '/src/Controller/SecurityController.php',
         'App\\DataFixtures\\AppFixtures' => __DIR__ . '/../..' . '/src/DataFixtures/AppFixtures.php',
+        'App\\Entity\\Exercice' => __DIR__ . '/../..' . '/src/Entity/Exercice.php',
         'App\\Entity\\Job' => __DIR__ . '/../..' . '/src/Entity/Job.php',
         'App\\Entity\\Post' => __DIR__ . '/../..' . '/src/Entity/Post.php',
         'App\\Entity\\Tag' => __DIR__ . '/../..' . '/src/Entity/Tag.php',
@@ -597,6 +599,7 @@ class ComposerStaticInite3051687080b2ac78e10fa357a6f3d60
         'App\\Form\\PostType' => __DIR__ . '/../..' . '/src/Form/PostType.php',
         'App\\Form\\TagType' => __DIR__ . '/../..' . '/src/Form/TagType.php',
         'App\\Kernel' => __DIR__ . '/../..' . '/src/Kernel.php',
+        'App\\Repository\\ExerciceRepository' => __DIR__ . '/../..' . '/src/Repository/ExerciceRepository.php',
         'App\\Repository\\JobRepository' => __DIR__ . '/../..' . '/src/Repository/JobRepository.php',
         'App\\Repository\\PostRepository' => __DIR__ . '/../..' . '/src/Repository/PostRepository.php',
         'App\\Repository\\TagRepository' => __DIR__ . '/../..' . '/src/Repository/TagRepository.php',
