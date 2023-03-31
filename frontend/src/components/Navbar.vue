@@ -75,6 +75,7 @@
       <router-link
         v-if="isLogged"
         class="navbar__list__link"
+        :class="{ 'navbar__list__link--active': activeRouteName.startsWith('admin')}"
         :to="{ name: 'admin' }"
       >
         <vue-feather
