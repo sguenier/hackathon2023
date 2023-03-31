@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Job;
 use App\Repository\UserRepository;
 use App\Repository\JobRepository;
+use App\Repository\TagRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,7 +24,7 @@ class UserController extends AbstractController
 {
 
     #[Route('/createuser/', name: 'user_create', methods: ['POST']) ]
-    public function create(UserRepository $userRepository, JobRepository $jobRepository, Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    public function create(UserRepository $userRepository, JobRepository $jobRepository, TagRepository $tagRepository, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
 
         $params = json_decode($request->getContent(), true);
@@ -62,6 +63,21 @@ class UserController extends AbstractController
                 $user->setSex($params['sex']);
                 $user->setDoctor($params['doctor']);
                 $user->setBirthdate(DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $params['birthdate']));
+
+                $tmp_tags = json_decode($params['tags'], true);
+                foreach ($tmp_tags as $tag) {
+                    $tmp = $tagRepository->find($tag);
+
+                    if ( is_null($tmp) ) {
+                        $resp = array(
+                            "message"=>"One of the provided tag is incorrect."
+                        );
+                
+                        return new JsonResponse($resp, 404);
+                    }
+
+                    $user->addTag($tmp);
+                }
 
                 //param nullable
                 $user->setPhonenumber((isset($params['phonenumber']) && $params['phonenumber']!="")?$params['phonenumber']:null);
@@ -186,6 +202,26 @@ class UserController extends AbstractController
             $pwd = $passwordHasher->hashPassword($user, $params['pwd']);
             $user->setPassword($pwd);
             $updated = true;
+        }
+
+        if (isset($params['tags'])) {
+            $tags_already = $user->getTags();
+
+            foreach ($tags_already as $tmp_tag) {
+                $user->removeElement($tmp_tag);
+            }
+
+            $tmp_tags = json_decode($param['tags'], true);
+            foreach ($tmp_tags as $tag) {
+                $tmp=$tagRepository->find($tag);
+                if(is_null($tag)){
+                    $resp = array(
+                        "message"=>"A provided tag is incorrect."
+                    );
+            
+                    return new JsonResponse($resp, 404);
+                }
+            }
         }
 
         if (isset($params['sex']) && $params['sex']!="") {
@@ -358,6 +394,16 @@ class UserController extends AbstractController
     public function userToArray($user)
     {
         $job = (!is_null($user->getJob()))?["id"=>$user->getJob()->getId(),"name"=>$user->getJob()->getName()]:null;
+        $tags = array();
+
+        foreach ($user->getTags() as $tag) {
+            $tmp = array(
+                "id"=>$tag->getId(),
+                "name"=>$tag->getName()
+            );
+
+            $tags[] = $tmp;
+        }
 
         $tabUser = array(
             "email"=>$user->getEmail(),
@@ -370,7 +416,8 @@ class UserController extends AbstractController
             "phonenumber"=>$user->getPhonenumber(),
             "doctor"=>$user->getDoctor(),
             "size"=>$user->getSize(),
-            "weight"=>$user->getWeight()
+            "weight"=>$user->getWeight(),
+            "tags"=>$tags
         );
 
         return $tabUser;

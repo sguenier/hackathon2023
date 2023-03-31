@@ -9,12 +9,13 @@ use App\Entity\Post;
 use App\Entity\Exercice;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Monolog\DateTimeImmutable;
 
 class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        
         //BLOC CREATION JOB
 
         $job1 = new Job();
@@ -89,7 +90,7 @@ class AppFixtures extends Fixture
         $user1->setEmail('mail1@mail.com');
         $user1->setRoles(['ROLE_ADMIN']);
         $user1->setLastname('Bin');
-        $user1->setFristname('Chilling');
+        $user1->setFirstname('Chilling');
         $user1->setJob($job1);
         $user1->setSocialSecurityNumber("197153638292736383");
         $user1->setSex('male');
@@ -98,13 +99,13 @@ class AppFixtures extends Fixture
         $user1->setDoctor('Mahbul');
         $user1->setSize(173);
         $user1->setWeight(66);
-        $user1->setPassword($passwordHasher->hashPassword($user1, "1234567"));
+        $user1->setPassword("1234567");
 
         $user2 = new User();
         $user2->setEmail('mail2@mail.com');
         $user2->setRoles(['ROLE_ADMIN']);
         $user2->setLastname('Jean');
-        $user2->setFristname('Bon');
+        $user2->setFirstname('Bon');
         $user2->setJob($job2);
         $user2->setSocialSecurityNumber("1971536876674568");
         $user2->setSex('male');
@@ -113,12 +114,12 @@ class AppFixtures extends Fixture
         $user2->setDoctor('Strange');
         $user2->setSize(180);
         $user2->setWeight(77);
-        $user2->setPassword($passwordHasher->hashPassword($user2, "1234567"));
+        $user2->setPassword("1234567");
 
         $user = new User();
         $user->setEmail('mail3@mail.com');
         $user->setLastname('Ben');
-        $user->setFristname('Laden');
+        $user->setFirstname('Laden');
         $user->setJob($job4);
         $user->setSocialSecurityNumber("1971786764343456789");
         $user->setSex('male');
@@ -127,12 +128,12 @@ class AppFixtures extends Fixture
         $user->setDoctor('Who');
         $user->setSize(168);
         $user->setWeight(59);
-        $user->setPassword($passwordHasher->hashPassword($user, "1234567"));
+        $user->setPassword("1234567");
 
         $user = new User();
         $user->setEmail('mail4@mail.com');
         $user->setLastname('Pierre');
-        $user->setFristname('Jack');
+        $user->setFirstname('Jack');
         $user->setJob($job5);
         $user->setSocialSecurityNumber("1971786987654");
         $user->setSex('male');
@@ -141,7 +142,7 @@ class AppFixtures extends Fixture
         $user->setDoctor('Gynéco');
         $user->setSize(198);
         $user->setWeight(113);
-        $user->setPassword($passwordHasher->hashPassword($user, "1234567"));
+        $user->setPassword("1234567");
 
         //BLOC POUR POST
         $post = new Post();
@@ -211,6 +212,11 @@ class AppFixtures extends Fixture
 
         $manager->flush();
 
+    }
+
+    public function getPasswordHasher(UserPasswordHasherInterface $passwordHasher)
+    {
+        return $passwordHasher;
     }
 
 }
