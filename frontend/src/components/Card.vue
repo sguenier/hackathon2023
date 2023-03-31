@@ -1,7 +1,7 @@
 <template>
   <router-link
+    class="link"
     :to="{ name: name, params: { id: id } }"
-    class="navbar__list__link"
   >
     <div
       class="card"
@@ -51,11 +51,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.link {
+  text-decoration: none;
+}
 .card {
   display: flex;
   flex-direction: column;
   gap: 12px;
   cursor: pointer;
+
 
   &__image {
     width: 160px;
