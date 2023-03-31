@@ -11,13 +11,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+
 
 #[Route('/tag')]
 class TagController extends AbstractController
 {
     #[Route('s/', name: 'app_tag_index', methods: ['GET'])]
-    public function index(TagRepository $tagRepository): Response
+    public function index(TagRepository $tagRepository, SerializerInterface $serializer): Response
     {
+        $json = $serializer->serialize($tagRepository->findAll(), 'json', [
+            'ignored_attributes' => ['posts'],
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }
+        ]);
+        return new JsonResponse($json, 200, [], true);
         return $this->json($tagRepository->findAll());
 
     }
