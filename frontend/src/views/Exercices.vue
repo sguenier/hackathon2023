@@ -21,6 +21,8 @@
         :key="exercice.id"
         :title="exercice.title"
         :image="exercice.image"
+        name="exercice"
+        :id="exercice.id"
       />
     </div>
 

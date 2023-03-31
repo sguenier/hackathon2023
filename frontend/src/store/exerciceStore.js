@@ -5,10 +5,12 @@ export const useExerciceStore = defineStore('exerciceStore', {
   state: () => ({
     exercices: [],
     isExercicesLoading: false,
-    categories: [],
-    isCategoriesLoading: false,
     exercice: {},
     isExerciceLoading: false,
+    categories: [],
+    isCategoriesLoading: false,
+    categorie: {},
+    isCategorieLoading: false,
   }),
 
   actions: {
@@ -96,7 +98,7 @@ export const useExerciceStore = defineStore('exerciceStore', {
           id: 1,
           title: 'Exercice 1',
           image: 'https://picsum.photos/200/300',
-          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, vel al. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, vel al. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, vel al.',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, vel al. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, vel al. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, vel al. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, vel al. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, vel al. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, vel al.',
           categorie: '1',
           video: "https://www.youtube.com/embed/Lrl4EWxaT0s",
           duration: 120,
@@ -165,6 +167,34 @@ export const useExerciceStore = defineStore('exerciceStore', {
       await new Promise((resolve) => setTimeout(resolve, 300));
       this.categories = data;
       this.isCategoriesLoading = false;
+      return data;
+    },
+    
+    async getCategorie(id) {
+      this.isCategorieLoading = true;
+      // const { data } = await $API.get('categories/' + id);
+      let data = [
+        {
+          id: 1,
+          title: 'Musculation',
+        },
+        {
+          id: 2,
+          title: 'Etirement',
+        },
+        {
+          id: 3,
+          title: 'Echauffement',
+        },
+        {
+          id: 4,
+          title: 'Cardio',
+        },
+      ];
+      data = data.filter((categorie) => categorie.id == id);
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      this.categorie = data[0];
+      this.isCategorieLoading = false;
       return data;
     },
   },
