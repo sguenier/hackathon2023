@@ -95,6 +95,9 @@ class PostController extends AbstractController
         $post->setCreatedAt(new \DateTimeImmutable());
         
         $arrayTags = JSON_decode($data['tags'], true);
+        if($arrayTags == null) {
+            $arrayTags = [];
+        }
         foreach ($arrayTags as $tag) {
             $tag = $tagRepository->find($tag);
             if($tag == null) {
@@ -117,6 +120,7 @@ class PostController extends AbstractController
     #[Route('/{id}/', name: 'app_post_show', methods: ['GET'])]
     public function show(Post $post): Response
     {
+        $jsonedTag = [];
         foreach ($post->getTag() as $tag) {
             $jsonedTag[] = [
                 'id' => $tag->getId(),
@@ -129,19 +133,20 @@ class PostController extends AbstractController
             'content' => $post->getContent(),
             'image' => $post->getImage(),
             'created_at' => $post->getCreatedAt(),
+            'author' => $post->getAuthor()->getId(),
             'Tag' => $jsonedTag
         ]; 
-        // 'author' => $post->getAuthor()->getUsername(),
 
         return new JsonResponse($jsonedPost); 
     }
 
     #[Route('/{id}/', name: 'app_post_edit', methods: ['POST'])]
-    public function edit(Request $request, Post $post, PostRepository $postRepository, UserRepository $userRepository): Response
+    public function edit(Request $request, Post $post, PostRepository $postRepository, UserRepository $userRepository, TagRepository $tagRepository): Response
     {
        
         $data['title'] = $request->request->get('title') ?? null;
         $data['content'] = $request->request->get('content') ?? null;
+        $data['tags'] = $request->request->get('tags') ?? null;
         
         if (!isset($data['title']) || !isset($data['content']) ) {
             return new JsonResponse(['error' => 'Missing required fields'], 400);
@@ -193,16 +198,36 @@ class PostController extends AbstractController
             $post->setTitle($data['title']);
             $post->setContent($data['content']);
 
+            $arrayTags = JSON_decode($data['tags'], true);
+            if($arrayTags == null) {
+                $arrayTags = [];
+            }
+
+            foreach ($post->getTag() as $tag) {
+                $post->removeTag($tag);
+            }
+            foreach ($arrayTags as $tag) {
+                $tag = $tagRepository->find($tag);
+                if($tag == null) {
+                    return new JsonResponse(['error' => 'Tag not found'], 400);
+                }else{
+                    $post->addTag($tag);
+                }
+            }
+            
+
             // $post->setUpdatedAt(new \DateTimeImmutable());
             $postRepository->save($post, true);
             // return the updated post
             $jsonedTag = [];
-            foreach ($post->getTag() as $tag) {
-                $jsonedTag[] = [
-                    'id' => $tag->getId(),
-                    'name' => $tag->getName()
-                ];
-            }
+                foreach ($post->getTag() as $tag) {
+                    $jsonedTag[] = [
+                        'id' => $tag->getId(),
+                        'name' => $tag->getName()
+                    ];
+                }
+                    
+
             $jsonedPost = [
                 'id' => $post->getId(),
                 'title' => $post->getTitle(),
