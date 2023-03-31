@@ -11,6 +11,8 @@
         :key="advise.id"
         :image="advise.image"
         :title="advise.title"
+        :id="advise.id"
+        @click="cardClick"
       />
     </div>
   </div>
@@ -52,11 +54,16 @@ export default {
 
     const advises = computed(() => blogStore.advises);
 
+    const cardClick = (id) => {
+      // router.push({ name: 'advise', params: { id } });
+    };
+
     return {
       isLogged,
       advises,
       filteredTabs,
       selectedTabValue,
+      cardClick,
     };
   },
 };

@@ -1,20 +1,16 @@
 <template>
-  <router-link
-    class="link"
-    :to="{ name: name, params: { id: id } }"
+  <div
+    class="card"
+    :class="{ 'card--large': isLarge }"
+    @click="$emit('click', id)"
   >
-    <div
-      class="card"
-      @click="$emit('click')"
+    <img
+      class="card__image"
+      :src="image"
+      :alt="title"
     >
-      <img
-        class="card__image"
-        :src="image"
-        :alt="title"
-      >
-      <span class="card__title" >{{ title }}</span>
-    </div>
-  </router-link>
+    <span class="card__title" >{{ title }}</span>
+  </div>
 </template>
 
 <script>
@@ -38,12 +34,12 @@ export default {
       type: String,
       required: true,
     },
-    name: {
-      type: String,
-      required: false,
-    },
     id: {
       type: Number,
+      required: false,
+    },
+    isLarge: {
+      type: Boolean,
       required: false,
     },
   },
@@ -59,7 +55,6 @@ export default {
   flex-direction: column;
   gap: 12px;
   cursor: pointer;
-
 
   &__image {
     width: 160px;
@@ -88,6 +83,12 @@ export default {
 
     .card__title {
       text-decoration: underline;
+    }
+  }
+
+  &--large {
+    .card__image {
+      height: 300px;
     }
   }
 }
