@@ -17,7 +17,7 @@ export const useTagStore = defineStore('tagStore', {
       try {
         // uncomment to fake long request for showing app loading
         // await new Promise((resolve) => setTimeout(resolve, 800));
-        const { data } = await $API.get('admin/tag/');
+        const { data } = await $API.get('admin/tags/');
         this.tags = data;
         this.isTagsLoading = false;
         return data;
@@ -25,6 +25,11 @@ export const useTagStore = defineStore('tagStore', {
         this.isTagsLoading = false;
         throw error;
       }
+    },
+    async deleteTag(id) {
+      await $API.delete(`admin/tag/${id}/`);
+      this.tags = this.tags.filter((tag) => tag.id !== id);
+      return true;
     },
   },
 });
