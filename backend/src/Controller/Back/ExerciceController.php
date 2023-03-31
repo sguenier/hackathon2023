@@ -12,16 +12,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/exercice')]
 class ExerciceController extends AbstractController
 {
 
-    #[Route('/', name: 'app_exercice_index', methods: ['GET'])]
-    public function index(ExerciceRepository $exerciceRepository): Response
+    #[Route('s/', name: 'app_exercice_index', methods: ['GET'])]
+    public function index(ExerciceRepository $exerciceRepository,SerializerInterface $serializer): Response
     {
         // return json response
-        return $this->json($exerciceRepository->findAll());
+        $json = $serializer->serialize($exerciceRepository->findAll(), 'json', [
+            // dont return the posts of the id, so it doesnt loop
+            'ignored_attributes' => ['exercices','author','posts'],
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }   
+        ]);
+        return new Response($json, 200, ['Content-Type' => 'application/json']);
     }
 
     #[Route('/create/', name: 'app_exercice_create', methods: ['POST'])]
