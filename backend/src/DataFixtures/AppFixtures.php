@@ -100,6 +100,7 @@ class AppFixtures extends Fixture
         $user1->setSize(173);
         $user1->setWeight(66);
         $user1->setPassword("1234567");
+        $manager->persist($user1);
 
         $user2 = new User();
         $user2->setEmail('mail2@mail.com');
@@ -115,6 +116,7 @@ class AppFixtures extends Fixture
         $user2->setSize(180);
         $user2->setWeight(77);
         $user2->setPassword("1234567");
+        $manager->persist($user2);
 
         $user = new User();
         $user->setEmail('mail3@mail.com');
@@ -143,6 +145,7 @@ class AppFixtures extends Fixture
         $user->setSize(198);
         $user->setWeight(113);
         $user->setPassword("1234567");
+        $manager->persist($user);
 
         //BLOC POUR POST
         $post = new Post();
@@ -153,6 +156,7 @@ class AppFixtures extends Fixture
         $post->setImage('image_flemme1.jpeg');
         $post->addTag($tag1);
         $post->addTag($tag5);
+        $manager->persist($post);
 
         $post = new Post();
         $post->setTitle('SOIGNEZ VOS DENTS');
@@ -161,6 +165,7 @@ class AppFixtures extends Fixture
         $post->setAuthor($user2);
         $post->setImage('image_flemme2.jpeg');
         $post->addTag($tag3);
+        $manager->persist($post);
 
         $post = new Post();
         $post->setTitle('SOIGNEZ VOS YEUX');
@@ -169,6 +174,7 @@ class AppFixtures extends Fixture
         $post->setAuthor($user2);
         $post->setImage('image_flemme3.jpeg');
         $post->addTag($tag8);
+        $manager->persist($post);
 
         $post = new Post();
         $post->setTitle('SOIGNEZ VOS PIEDS');
@@ -177,6 +183,7 @@ class AppFixtures extends Fixture
         $post->setAuthor($user2);
         $post->setImage('image_flemme4.jpeg');
         $post->addTag($tag9);
+        $manager->persist($post);
 
         //BLOC CREATION EXERCICE
         $exo1 = new Exercice();
@@ -188,35 +195,33 @@ class AppFixtures extends Fixture
         $exo1->setCover('image_flemme1.jpeg');
         $exo1->addTag($tag2);
         $exo1->setAuthor($user2);
+        $manager->persist($exo1);
 
-        $exo1 = new Exercice();
-        $exo1->setName('Tractions');
-        $exo1->setDuration('300');
-        $exo1->setEquipment("Des beaux bras");
-        $exo1->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed iaculis rutrum eros, sit amet dignissim sem luctus sed. Nam non tempor arcu. Aenean tellus magna, tempor id ipsum eu, volutpat laoreet ipsum. Maecenas placerat convallis turpis, ut dignissim lectus elementum in. Vivamus euismod, turpis et iaculis ultrices, mauris ipsum faucibus est, in cursus odio arcu eu lacus. Donec pharetra nisl sit amet sapien tristique bibendum. Phasellus volutpat condimentum faucibus. Maecenas nec tellus vel lectus pellentesque tristique. Mauris varius lacus non sollicitudin finibus.");
-        $exo1->setUrlyoutube("lSJTS87Ab4w");
-        $exo1->setCover('image_flemme2.jpeg');
-        $exo1->addTag($tag2);
-        $exo1->setAuthor($user2);
+        $exo2 = new Exercice();
+        $exo2->setName('Tractions');
+        $exo2->setDuration('300');
+        $exo2->setEquipment("Des beaux bras");
+        $exo2->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed iaculis rutrum eros, sit amet dignissim sem luctus sed. Nam non tempor arcu. Aenean tellus magna, tempor id ipsum eu, volutpat laoreet ipsum. Maecenas placerat convallis turpis, ut dignissim lectus elementum in. Vivamus euismod, turpis et iaculis ultrices, mauris ipsum faucibus est, in cursus odio arcu eu lacus. Donec pharetra nisl sit amet sapien tristique bibendum. Phasellus volutpat condimentum faucibus. Maecenas nec tellus vel lectus pellentesque tristique. Mauris varius lacus non sollicitudin finibus.");
+        $exo2->setUrlyoutube("lSJTS87Ab4w");
+        $exo2->setCover('image_flemme2.jpeg');
+        $exo2->addTag($tag2);
+        $exo2->setAuthor($user2);
+        $manager->persist($exo2);
 
-        $exo1 = new Exercice();
-        $exo1->setName('Burpees');
-        $exo1->setDuration('180');
-        $exo1->setEquipment("Un beau cul");
-        $exo1->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed iaculis rutrum eros, sit amet dignissim sem luctus sed. Nam non tempor arcu. Aenean tellus magna, tempor id ipsum eu, volutpat laoreet ipsum. Maecenas placerat convallis turpis, ut dignissim lectus elementum in. Vivamus euismod, turpis et iaculis ultrices, mauris ipsum faucibus est, in cursus odio arcu eu lacus. Donec pharetra nisl sit amet sapien tristique bibendum. Phasellus volutpat condimentum faucibus. Maecenas nec tellus vel lectus pellentesque tristique. Mauris varius lacus non sollicitudin finibus.");
-        $exo1->setUrlyoutube("lSJTS87Ab4w");
-        $exo1->setCover('image_flemme3.jpeg');
-        $exo1->addTag($tag4);
-        $exo1->setAuthor($user2);
+        $exo3 = new Exercice();
+        $exo3->setName('Burpees');
+        $exo3->setDuration(180);
+        $exo3->setEquipment("Un beau cul");
+        $exo3->setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed iaculis rutrum eros, sit amet dignissim sem luctus sed. Nam non tempor arcu. Aenean tellus magna, tempor id ipsum eu, volutpat laoreet ipsum. Maecenas placerat convallis turpis, ut dignissim lectus elementum in. Vivamus euismod, turpis et iaculis ultrices, mauris ipsum faucibus est, in cursus odio arcu eu lacus. Donec pharetra nisl sit amet sapien tristique bibendum. Phasellus volutpat condimentum faucibus. Maecenas nec tellus vel lectus pellentesque tristique. Mauris varius lacus non sollicitudin finibus.");
+        $exo3->setUrlyoutube("lSJTS87Ab4w");
+        $exo3->setCover('image_flemme3.jpeg');
+        $exo3->addTag($tag4);
+        $exo3->setAuthor($user2);
+        $manager->persist($exo3);
 
 
         $manager->flush();
 
-    }
-
-    public function getPasswordHasher(UserPasswordHasherInterface $passwordHasher)
-    {
-        return $passwordHasher;
     }
 
 }
