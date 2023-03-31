@@ -21,8 +21,8 @@
         :key="exercice.id"
         :title="exercice.title"
         :image="exercice.image"
-        name="exercice"
         :id="exercice.id"
+        @click="cardClick"
       />
     </div>
 
@@ -30,7 +30,14 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from 'vue';
+import {
+  computed,
+  onMounted,
+  ref,
+} from 'vue';
+
+import { useRouter } from 'vue-router';
+
 import Exercice from '@/components/Card.vue';
 import { useExerciceStore } from '@/store/exerciceStore';
 
@@ -40,6 +47,7 @@ export default {
     Exercice,
   },
   setup() {
+    const router = useRouter();
     const exercicesStore = useExerciceStore();
     const filter = ref(0);
 
@@ -55,11 +63,16 @@ export default {
       exercicesStore.getExercices(filter.value);
     };
 
+    const cardClick = (id) => {
+      router.push({ name: 'exercice', params: { id } });
+    };
+
     return {
       categories,
       filter,
       exercices,
       onFilterChange,
+      cardClick,
     };
 
     

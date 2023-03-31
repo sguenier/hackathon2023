@@ -16,7 +16,7 @@ export const useTagStore = defineStore('tagStore', {
       this.isTagsLoading = true;
       try {
         // uncomment to fake long request for showing app loading
-        await new Promise((resolve) => setTimeout(resolve, 800));
+        // await new Promise((resolve) => setTimeout(resolve, 800));
         const { data } = await $API.get('admin/tag/');
         this.tags = data;
         this.isTagsLoading = false;
