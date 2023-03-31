@@ -178,10 +178,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getJob(): ?Job
-    {
-        return $this->job;
-    }
+    // public function getJob(): ?Job
+    // {
+    //     return $this->job;
+    // }
 
     public function setJob(?Job $job): self
     {
