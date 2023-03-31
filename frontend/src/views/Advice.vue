@@ -7,18 +7,21 @@
       :alt="advice.title"
     >
     <div class="advice__infos">
-      <span>{{ advice.author }}</span>
+      <span>John Doe</span>
       <span> - </span>
-      <span> {{ advice.date }} </span>
+      <span v-if="advice.created_at"> {{ new Date(advice.created_at.date) }} </span>
     </div>
     <p class="advice__content">{{ advice.content }}</p>
-    <div class="advice__tags">
+    <div
+      class="advice__tags"
+      v-if="advice.Tag"
+    >
       <span 
-        v-for="tag in advice.tags"
+        v-for="tag in advice.Tag"
         :key="tag"
       >
-        {{ tag }}
-        <span v-if="advice.tags.indexOf(tag) !== advice.tags.length - 1"> - </span>
+        {{ tag.name }}
+        <span v-if="advice.Tag.indexOf(tag) !== advice.Tag.length - 1"> - </span>
       </span>
     </div>
   </div>
