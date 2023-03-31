@@ -38,6 +38,7 @@ export default {
     grid-template-areas: "topbar" "main";
     grid-template-rows: auto 1fr;
     grid-template-columns: 1fr;
+    padding-bottom: 4rem;
   }
 
   &__topbar {

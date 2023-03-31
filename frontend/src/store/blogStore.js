@@ -73,8 +73,38 @@ export const useBlogStore = defineStore('blogStore', {
 
     async getPost(id) {
       this.isPostLoading = true;
-      const { data } = await $API.get(`posts/${id}`);
-      this.post = data;
+      // const { data } = await $API.get(`posts/${id}`);
+      let data = [
+        {
+          id: 1,
+          title: 'Post 1',
+          image: 'https://picsum.photos/200/300',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, vel al',
+          date: '2021-01-01',
+          author: 'John Doe',
+          tags: [
+            'tag1',
+            'tag2',
+            'tag3',
+          ],
+        },
+        {
+          id: 2,
+          title: 'Post 2',
+          image: 'https://picsum.photos/200/300',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nunc nisl aliquam nisl, vel al',
+          date: '2021-01-01',
+          author: 'John Doe',
+          tags: [
+            'tag1',
+            'tag2',
+            'tag3',
+          ],
+        },
+      ];
+      data = data.filter((post) => post.id == id);
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      this.post = data[0];
       this.isPostLoading = false;
       
       return data;
