@@ -1,15 +1,20 @@
 <template>
-  <div
-    class="card"
-    @click="$emit('click')"
+  <router-link
+    :to="{ name: name, params: { id: id } }"
+    class="navbar__list__link"
   >
-    <img
-      class="card__image"
-      :src="image"
-      :alt="title"
+    <div
+      class="card"
+      @click="$emit('click')"
     >
-    <span class="card__title" >{{ title }}</span>
-  </div>
+      <img
+        class="card__image"
+        :src="image"
+        :alt="title"
+      >
+      <span class="card__title" >{{ title }}</span>
+    </div>
+  </router-link>
 </template>
 
 <script>
@@ -32,6 +37,14 @@ export default {
     title: {
       type: String,
       required: true,
+    },
+    name: {
+      type: String,
+      required: false,
+    },
+    id: {
+      type: Number,
+      required: false,
     },
   },
 };
