@@ -162,7 +162,7 @@ class ExerciceController extends AbstractController
     }
 
     #[Route('/{id}/', name: 'app_exercice_update', methods: ['POST'])]
-    public function update(Request $request, Exercice $exo, UserRepository $userRepository, TagRepository $tagRepository): Response
+    public function update(Request $request, Exercice $exo, UserRepository $userRepository, TagRepository $tagRepository, ExerciceRepository $exerciceRepository): Response
     {
 
         if (!$request->headers->has('Authorization')) {
@@ -252,7 +252,7 @@ class ExerciceController extends AbstractController
         }
 
         $exerciceRepository->save($exo, true);
-        $exoTab = $this->exerciceToArray($exoTab);
+        $exoTab = $this->exerciceToArray($exo);
         $resp = array(
             "message"=>"The exercice has been created with success.",
             "exercice"=>$exoTab
