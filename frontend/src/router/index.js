@@ -34,7 +34,7 @@ const router = createRouter({
           name: 'register-personal',
           component: () => import('@/views/Register/RegisterPersonal.vue'),
           beforeEnter: (to, from, next) => {
-            if (from.name === 'register-base') {
+            if (from.name === 'register-base' || from.name === 'register-care') {
               next();
             } else {
               next({ name: 'register-base' });
@@ -46,7 +46,7 @@ const router = createRouter({
           name: 'register-care',
           component: () => import('@/views/Register/RegisterCare.vue'),
           beforeEnter: (to, from, next) => {
-            if (from.name === 'register-personal') {
+            if (from.name === 'register-personal' || from.name === 'register-tags') {
               next();
             } else {
               next({ name: 'register-personal' });

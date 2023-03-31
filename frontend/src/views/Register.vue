@@ -22,7 +22,6 @@
     <div class="login-link">
       <router-link :to="{ name: 'login' }">Déjà inscrit ?</router-link>
     </div>
-    {{ form }}
   </main>
 </template>
 

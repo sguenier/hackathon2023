@@ -44,6 +44,13 @@ export const useAuthStore = defineStore('authStore', {
     },
 
     async register(form) {
+      if (typeof form.tags !== 'string') {
+        form.tags = form.tags.join(',');
+      }
+      if (typeof form.disease !== 'string') {
+        form.disease = form.disease.join(',');
+      }
+
       this.isRegisterLoading = true;
       try {
         const { data } = await $API.post('admin/user/createuser/', form);
