@@ -19,7 +19,7 @@
         type="search"
       />
       <router-link
-        :to="{ name: 'profile' }"
+        :to="{ name: 'home' }"
         v-if="isLogged"
         class="topbar__user"
       >
