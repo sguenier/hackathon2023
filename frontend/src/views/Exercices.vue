@@ -8,7 +8,7 @@
       @change="onFilterChange"
     >
       <el-option
-        v-for="item in categories"
+        v-for="item in tags"
         :key="item.id"
         :label="item.title"
         :value="item.id"
@@ -19,8 +19,8 @@
       <exercice
         v-for="exercice in exercices"
         :key="exercice.id"
-        :title="exercice.title"
-        :image="exercice.image"
+        :title="exercice.name"
+        image="https://picsum.photos/200/300"
         :id="exercice.id"
         @click="cardClick"
       />
@@ -40,6 +40,7 @@ import { useRouter } from 'vue-router';
 
 import Exercice from '@/components/Card.vue';
 import { useExerciceStore } from '@/store/exerciceStore';
+import { useTagStore } from '@/store/tagStore';
 
 export default {
   name: 'Exercices',
@@ -49,14 +50,15 @@ export default {
   setup() {
     const router = useRouter();
     const exercicesStore = useExerciceStore();
+    const tagsStore = useTagStore();
     const filter = ref(0);
 
-    const categories = computed(() => exercicesStore.categories);
+    const tags = computed(() => tagsStore.tags);
     const exercices = computed(() => exercicesStore.exercices);
 
     onMounted(() => {
       exercicesStore.getExercices(filter.value);
-      exercicesStore.getCategories();
+      tagsStore.getTags();
     });
 
     const onFilterChange = () => {
@@ -68,7 +70,7 @@ export default {
     };
 
     return {
-      categories,
+      tags,
       filter,
       exercices,
       onFilterChange,

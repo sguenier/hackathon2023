@@ -1,16 +1,25 @@
 <template>
   <div class="exercice">
     <h2>Exercice</h2>
-    <h3>{{ exercice.title }}</h3>
+    <h3>{{ exercice.name }}</h3>
     <iframe
       class="exercice__video"
-      :src="exercice.video"
+      :src="'https://www.youtube.com/embed/' + exercice.urlyoutube"
       title="YouTube video player"
       frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen
     />
     <div class="exercice__content">
+      <div class="exercice__tags">
+        <span
+          v-for="tag in exercice.Tag"
+          :key="tag.id"
+        >
+          {{ tag.name }}
+          <span v-if="exercice.Tag.indexOf(tag) !== exercice.Tag.length - 1"> - </span>
+        </span>
+      </div>
       <div class="exercice__infos">
         <div class="exercice__card">
           <vue-feather
@@ -31,7 +40,7 @@
             size="24"
             class="exercice__categorie-icon"
           />
-          <span>{{ categorie.title }}</span>
+          <span>{{ exercice.equipment }}</span>
           <vue-feather
             type="chevron-right"
             size="24"
@@ -39,7 +48,7 @@
           />
         </div>
       </div>
-      <p>{{ exercice.content }}</p>
+      <p>{{ exercice.description }}</p>
     </div>
     <div class="exercice__start">
       <button class="exercice__start__button">DÉMARRER L’ENTRAINEMENT</button>
@@ -83,8 +92,6 @@ export default {
     height: 410px;
     border-radius: 8px;
   }
-
-
 
   &__content {
     border: 1px solid var(--color-background-disable);
